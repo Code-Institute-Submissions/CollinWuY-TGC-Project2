@@ -1,17 +1,45 @@
 body {
+    padding: 0;
+    margin: 0;
+}
+
+#homepage {
     background-image: url(../assets/images/andrey-kirov-i7qsJX0Ym44-unsplash.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
     background-position: center;
+    background-size: cover;
     height: 100vh;
-    width: 100%;
+    width: 100vw;
 }
 
-#title-container {
-    background-color: transparent;
+#hm-wrapper {
+    background-color: rgba(1, 1, 1, 0.7);
+    width: 90vw;
 }
 
-#main-title {
-    font-size: 10vh;
-    color: darkblue;
+#hm-icon-wrapper {
+    width: 20vh;
+    height: 20vh;
+    border: 1px solid black;
+    border-radius: 20px;
+    background-color: rgba(1, 1, 1, 1)
+}
+
+#hm-icon {
+    width: 20vh;
+    height: 20vh;
+    color: blue;
+    border: 1px solid black;
+    border-radius: 20px;
+}
+
+#hm-title {
+    font-size: 5.5vh;
+}
+
+#hm-subtext {
+    font-size: 1.5vh;
+}
+
+#user-input {
+    font-size: 2.5vh;
 }
