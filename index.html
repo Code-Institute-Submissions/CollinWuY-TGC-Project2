@@ -29,8 +29,15 @@
             <div class='row d-flex flex-column mx-auto justify-content-center align-items-center'>
                 <h1 class="row text-white lead text-shadow font-weight-bolder mb-3" id="hm-title">Where to Park?</h1>
                 <p class="row text-white lead text-shadow mb-4" id="hm-subtext">SEARCH FOR CLOSEST AVAILABLE PARKING</p>
-                <div class="row input-group mx-auto justify-content-center align-items-center">
+                <div class="d-flex flex-column row input-group mx-auto justify-content-center align-items-center">
                     <button type='text' class='btn btn-primary' id="user-input">Auto-Locate</button>
+                    <div class="mt-3 text-white">
+                        <p>OR</p>
+                    </div>
+                    <div class="text-white">
+                        <p>Type in your location Landmark</p>
+                    </div>
+                    <div class="row text-center justify-content-center" id="userTextInput"><input type="text" placeholder="Nearest Landmark"></div>
                 </div>
             </div>
         </div>
@@ -48,11 +55,12 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+    <!-- Custom JS -->
+    <script src="js/main.js"></script>
     <!-- OneMap Script -->
     <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>
     <script src="js/oneMap.js"></script>
-    <!-- Custom JS -->
-    <script src="js/main.js"></script>
 </body>
 
 </html>
