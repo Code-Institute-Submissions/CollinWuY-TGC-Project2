@@ -37,7 +37,7 @@ $(document).ready(function() {
         })
     }
 
-    $('#user-input').on('click', fetchUserInputAuto);
+    $('#user-input-btn').on('click', fetchUserInputAuto);
     $('#userTextInput').keydown(function(e) {
         let keyPressed = event.keyCode || event.which;
         if (keyPressed === 13) {
@@ -45,21 +45,6 @@ $(document).ready(function() {
         }
     });
     openClose();
-
-    function getLocation() {
-        navigator.geolocation.getCurrentPosition(showPosition);
-    }
-
-    function showPosition(position) {
-        marker = new L.Marker([position.coords.latitude, position.coords.longitude], {
-            bounceOnAdd: false
-        }).addTo(map);
-        var popup = L.popup()
-            .setLatLng([position.coords.latitude, position.coords.longitude])
-            .setContent('You are here!')
-            .openOn(map);
-        map.setView([position.coords.latitude, position.coords.longitude], 18);
-    }
 
     function fetchUserInput() {
         let userText = $('#userTextInput').val();
