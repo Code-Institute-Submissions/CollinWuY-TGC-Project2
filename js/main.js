@@ -19,7 +19,32 @@ $(document).ready(function() {
     basemap.addTo(map);
     map.invalidateSize();
 
-    $('#user-input').on('click', fetchUserInput);
+    const openClose = function() {
+        let action = 1;
+        $('#hm-sectext-sub').on('click', function() {
+            let textSelector = document.querySelector('#userTextInputDiv');
+            if (action == 1) {
+                textSelector.classList.remove('hidden');
+                $('#hm-sectext-sub').css('color', 'red');
+                action = 2;
+                console.log(action);
+            } else {
+                textSelector.classList.add('hidden');
+                $('#hm-sectext-sub').css('color', 'blue');
+                action = 1;
+                console.log(action);
+            }
+        })
+    }
+
+    $('#user-input').on('click', fetchUserInputAuto);
+    $('#userTextInput').keydown(function(e) {
+        let keyPressed = event.keyCode || event.which;
+        if (keyPressed === 13) {
+            fetchUserInput();
+        }
+    });
+    openClose();
 
     function getLocation() {
         navigator.geolocation.getCurrentPosition(showPosition);
@@ -37,8 +62,11 @@ $(document).ready(function() {
     }
 
     function fetchUserInput() {
+        let userText = $('#userTextInput').val();
+        console.log(userText);
+
         const onMapParams = new URLSearchParams({
-            searchVal: 'Tampines Mall',
+            searchVal: userText,
             returnGeom: 'Y',
             getAddrDetails: 'Y'
         })
@@ -60,6 +88,21 @@ $(document).ready(function() {
                 map.setView([mapLat, mapLong], 17);
                 console.log(mapLat, mapLong);
             }).catch(error => console.log(error));
+    }
+
+    function fetchUserInputAuto() {
+        navigator.geolocation.getCurrentPosition(showPosition);
+
+        function showPosition(position) {
+            marker = new L.Marker([position.coords.latitude, position.coords.longitude], {
+                bounceOnAdd: false
+            }).addTo(map);
+            var popup = L.popup()
+                .setLatLng([position.coords.latitude, position.coords.longitude])
+                .setContent('You are here!')
+                .openOn(map);
+            map.setView([position.coords.latitude, position.coords.longitude], 18);
+        }
     }
 
 
