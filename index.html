@@ -20,27 +20,31 @@
 
 <body>
     <div class="row d-flex justify-content-center align-items-center" id="homepage">
-        <div class="row d-flex flex-column mb-5 pb-5" id="hm-wrapper">
+        <div class="row d-flex flex-column mb-5 pb-5" id="hmWrapper">
             <!-- <img src="assets/images/underground-car-parking-garage-with-vacant-places_107791-1635.jpg">
              -->
-            <div class="row mx-auto justify-content-center align-items-center m-4" id="hm-icon-wrapper">
-                <i class="fas fa-parking bg-white" id="hm-icon"></i>
+            <div class="row mx-auto justify-content-center align-items-center m-4" id="hmIconWrapper">
+                <i class="fas fa-parking bg-white" id="hmIcon"></i>
             </div>
             <div class='row d-flex flex-column mx-auto justify-content-center align-items-center'>
-                <h1 class="row text-white lead text-shadow font-weight-bolder mb-3" id="hm-title">Where to Park?</h1>
-                <p class="row lead text-white lead text-shadow mb-4" id="hm-subtext">SEARCH FOR CLOSEST AVAILABLE PARKING</p>
+                <h1 class="row text-white lead text-shadow font-weight-bolder mb-3" id="hmTitle">Where to Park?</h1>
+                <p class="row lead text-white lead text-shadow mb-4" id="hmSubText">SEARCH FOR CLOSEST AVAILABLE PARKING</p>
                 <div class="d-flex flex-column row input-group mx-auto justify-content-center align-items-center">
-                    <button type='text' class='btn btn-primary' id="user-input-btn">Auto-Locate</button>
-                    <p class="mt-3 text-white lead" id="hm-sectext">OR</p>
-                    <p class="lead font-weight-bold" id="hm-sectext-sub">Type in your location Landmark</p>
-                    <div class="row mt-3 hidden" id="userTextInputDiv"><input type="text" id="userTextInput" placeholder="Nearest Landmark"></div>
+                    <button type='text' class='btn btn-primary' id="userInputBtn">Auto-Locate</button>
+                    <p class="mt-3 text-white lead" id="hmSecText">OR</p>
+                    <p class="lead font-weight-bold" id="hmSecTextSub">Type in your location Landmark</p>
+                    <div class="row mt-3 hidden" id="userTextInputDiv"><input type="text" id="userTextInput1" placeholder="Nearest Landmark"></div>
                 </div>
             </div>
         </div>
     </div>
-    <div class='row d-flex flex-column justify-content-center align-items-center' id="mapPage">
-        <h1 id='sgMap'>Singapore Map</h1>
-        <div id='mapdiv'></div>
+    <div class='container-fluid row' id="mapPage">
+        <div class="position-relative" id='mapdiv'></div>
+        <div class="input-group ml-5 position-absolute " id="mapInfo">
+            <a href="#homepage"><i class="fas fa-parking bg-white row m-2" id="mapInfoIcon"></i></a>
+            <div class="align-self-center" id="userTextInputDiv"><input type="text" id="userTextInput2" placeholder="Nearest Landmark"></div>
+        </div>
+
     </div>
 
 

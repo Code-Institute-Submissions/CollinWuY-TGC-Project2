@@ -21,33 +21,81 @@ $(document).ready(function() {
 
     const openClose = function() {
         let action = 1;
-        $('#hm-sectext-sub').on('click', function() {
+        $('#hmSecTextSub').on('click', function() {
             let textSelector = document.querySelector('#userTextInputDiv');
             if (action == 1) {
                 textSelector.classList.remove('hidden');
-                $('#hm-sectext-sub').css('color', 'red');
+                $('#hmSecTextSub').css('color', 'red');
                 action = 2;
                 console.log(action);
             } else {
                 textSelector.classList.add('hidden');
-                $('#hm-sectext-sub').css('color', 'blue');
+                $('#hmSecTextSub').css('color', 'blue');
                 action = 1;
                 console.log(action);
             }
         })
     }
 
-    $('#user-input-btn').on('click', fetchUserInputAuto);
-    $('#userTextInput').keydown(function(e) {
+
+    $('#mapInfoIcon').on('click', function() {
+        let homepage = document.querySelector('#homepage');
+        homepage.classList.remove('hidden');
+    })
+
+    $('#userInputBtn').on('click', fetchUserInputAuto);
+    $('#userTextInput1').keydown(function(e) {
         let keyPressed = event.keyCode || event.which;
         if (keyPressed === 13) {
-            fetchUserInput();
+            fetchUserInput1();
+            $('#userTextInput1').val("");
+        }
+    });
+    $('#userTextInput2').keydown(function(e) {
+        let keyPressed = event.keyCode || event.which;
+        if (keyPressed === 13) {
+            fetchUserInput2();
+            $('#userTextInput2').val("");
         }
     });
     openClose();
 
-    function fetchUserInput() {
-        let userText = $('#userTextInput').val();
+    function fetchUserInput1() {
+        let userText = $('#userTextInput1').val();
+        console.log(userText);
+
+        let homepage = document.querySelector('#homepage');
+        homepage.classList.add('hidden');
+        let mappage = document.querySelector('#mapPage');
+        mappage.classList.remove('hidden');
+
+        const onMapParams = new URLSearchParams({
+            searchVal: userText,
+            returnGeom: 'Y',
+            getAddrDetails: 'Y'
+        })
+        const oneMapURL = `https://developers.onemap.sg/commonapi/search?${onMapParams.toString()}`;
+
+        let mapLong;
+        let mapLat;
+
+        fetch(oneMapURL)
+            .then(response => response.json())
+            .then(data => {
+                let mapLat = data.results[0].LATITUDE;
+                let mapLong = data.results[0].LONGTITUDE;
+                marker = new L.Marker([mapLat, mapLong], { bounceOnAdd: false }).addTo(map);
+                let popup = L.popup()
+                    .setLatLng([mapLat, mapLong])
+                    .setContent('You are here!')
+                    .openOn(map);
+                map.setView([mapLat, mapLong], 17);
+                console.log(mapLat, mapLong);
+            }).catch(error => console.log(error));
+    }
+
+    function fetchUserInput2() {
+        let userText = $('#userTextInput2').val();
         console.log(userText);
 
         const onMapParams = new URLSearchParams({
@@ -77,6 +125,10 @@ $(document).ready(function() {
 
     function fetchUserInputAuto() {
         navigator.geolocation.getCurrentPosition(showPosition);
+        let homepage = document.querySelector('#homepage');
+        homepage.classList.add('hidden');
+        let mappage = document.querySelector('#mapPage');
+        mappage.classList.remove('hidden');
 
         function showPosition(position) {
             marker = new L.Marker([position.coords.latitude, position.coords.longitude], {
