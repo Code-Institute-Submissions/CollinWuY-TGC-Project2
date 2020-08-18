@@ -1,23 +1,31 @@
 $(document).ready(function() {
+    $('#mapPage').hide();
 
-    const center = L.bounds([1.56073, 104.11475], [1.16, 103.502]).getCenter();
-    const map = L.map('mapdiv').setView([center.x, center.y], 13);
 
-    const basemap = L.tileLayer('https://maps-{s}.onemap.sg/v3/Default/{z}/{x}/{y}.png', {
-        detectRetina: true,
-        maxZoom: 18,
-        minZoom: 11,
-        //Do not remove this attribution
-        attribution: '<img src="https://docs.onemap.sg/maps/images/oneMap64-01.png" style="height:20px;width:20px;"/> New OneMap | Map data &copy; contributors, <a href="http://SLA.gov.sg">Singapore Land Authority</a>'
-    });
+    const createMap = function() {
+        const center = L.bounds([1.56073, 104.11475], [1.16, 103.502]).getCenter();
+        const map = L.map('mapdiv').setView([center.x, center.y], 11);
 
-    map.setMaxBounds([
-        [1.56073, 104.1147],
-        [1.16, 103.502]
-    ]);
+        const basemap = L.tileLayer('https://maps-{s}.onemap.sg/v3/Default/{z}/{x}/{y}.png', {
+            detectRetina: true,
+            maxZoom: 18,
+            minZoom: 11,
+            //Do not remove this attribution
+            attribution: '<img src="https://docs.onemap.sg/maps/images/oneMap64-01.png" style="height:20px;width:20px;"/> New OneMap | Map data &copy; contributors, <a href="http://SLA.gov.sg">Singapore Land Authority</a>'
+        });
 
-    basemap.addTo(map);
-    map.invalidateSize();
+        map.setMaxBounds([
+            [1.56073, 104.1147],
+            [1.16, 103.502]
+        ]);
+
+        basemap.addTo(map);
+        map.invalidateSize();
+    }
+
+    createMap();
+
+
 
     const openClose = function() {
         let action = 1;
@@ -74,7 +82,9 @@ $(document).ready(function() {
             returnGeom: 'Y',
             getAddrDetails: 'Y'
         })
+
         const oneMapURL = `https://developers.onemap.sg/commonapi/search?${onMapParams.toString()}`;
+        const oneMapThemeURL = `https://developers.onemap.sg/privateapi/themesvc/retrieveTheme?${onMapThemeParams.toString()}`;
 
         let mapLong;
         let mapLat;
@@ -91,7 +101,17 @@ $(document).ready(function() {
                     .openOn(map);
                 map.setView([mapLat, mapLong], 17);
                 console.log(mapLat, mapLong);
+                const onMapThemeParams = new URLSearchParams({
+                    queryName: 'hdb_car_park_information',
+                    token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjUzMjksInVzZXJfaWQiOjUzMjksImVtYWlsIjoieGxhenVyZWx4QGdtYWlsLmNvbSIsImZvcmV2ZXIiOmZhbHNlLCJpc3MiOiJodHRwOlwvXC9vbTIuZGZlLm9uZW1hcC5zZ1wvYXBpXC92MlwvdXNlclwvc2Vzc2lvbiIsImlhdCI6MTU5NzY0Nzg4MSwiZXhwIjoxNTk4MDc5ODgxLCJuYmYiOjE1OTc2NDc4ODEsImp0aSI6ImYxN2RlNGQ2YmYxNzMyYjQ5YjM4NTc2YzU5OWM2OGNiIn0.Gnm8uI2a4epvdeBE8lKyU2-JOItCtA7-Ake36tiSOog'
+                });
+                fetch(oneMapThemeURL)
+                    .then(themeResp => {
+                        let latLng = themeResp.SrchResults[1].LatLng;
+                        console.log(latLng);
+                    })
             }).catch(error => console.log(error));
+
     }
 
     function fetchUserInput2() {
@@ -124,11 +144,11 @@ $(document).ready(function() {
     }
 
     function fetchUserInputAuto() {
+        $('#mapPage').show();
         navigator.geolocation.getCurrentPosition(showPosition);
         let homepage = document.querySelector('#homepage');
         homepage.classList.add('hidden');
-        let mappage = document.querySelector('#mapPage');
-        mappage.classList.remove('hidden');
+
 
         function showPosition(position) {
             marker = new L.Marker([position.coords.latitude, position.coords.longitude], {
@@ -142,5 +162,19 @@ $(document).ready(function() {
         }
     }
 
+
+
+    // function ThemeDetails() {
+    //     $.$.ajax({
+    //         url: 'https://developers.onemap.sg/privateapi/themesvc/retrieveTheme?queryName=hdb_car_park_information&token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjUzMjksInVzZXJfaWQiOjUzMjksImVtYWlsIjoieGxhenVyZWx4QGdtYWlsLmNvbSIsImZvcmV2ZXIiOmZhbHNlLCJpc3MiOiJodHRwOlwvXC9vbTIuZGZlLm9uZW1hcC5zZ1wvYXBpXC92MlwvdXNlclwvc2Vzc2lvbiIsImlhdCI6MTU5NzY0Nzg4MSwiZXhwIjoxNTk4MDc5ODgxLCJuYmYiOjE1OTc2NDc4ODEsImp0aSI6ImYxN2RlNGQ2YmYxNzMyYjQ5YjM4NTc2YzU5OWM2OGNiIn0.Gnm8uI2a4epvdeBE8lKyU2-JOItCtA7-Ake36tiSOog',
+    //         success: function(result) {
+    //             //Set result to a variable for writing
+    //             var TrueResult = JSON.stringify(result);
+    //             document.write(TrueResult);
+    //         }
+    //     });
+    // }
+
+    // ThemeDetails();
 
 })
