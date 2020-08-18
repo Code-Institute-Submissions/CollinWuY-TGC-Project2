@@ -1,10 +1,11 @@
 $(document).ready(function() {
     $('#mapPage').hide();
 
+    let map = "";
 
     const createMap = function() {
         const center = L.bounds([1.56073, 104.11475], [1.16, 103.502]).getCenter();
-        const map = L.map('mapdiv').setView([center.x, center.y], 11);
+        map = L.map('mapdiv').setView([center.x, center.y], 11);
 
         const basemap = L.tileLayer('https://maps-{s}.onemap.sg/v3/Default/{z}/{x}/{y}.png', {
             detectRetina: true,
