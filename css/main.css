@@ -7,7 +7,7 @@ body {
     margin: 0;
 }
 
-#homepage {
+#homePage {
     background-image: url(../assets/images/andrey-kirov-i7qsJX0Ym44-unsplash.jpg);
     background-position: center;
     background-size: cover;
@@ -16,7 +16,7 @@ body {
     margin: 0;
     padding: 0;
     transition: ease-in;
-    transition-duration: 2s;
+    transition-duration: 1s;
 }
 
 #mapPage {

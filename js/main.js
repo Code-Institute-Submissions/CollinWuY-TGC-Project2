@@ -1,11 +1,26 @@
 $(document).ready(function() {
-    $('#mapPage').hide();
 
-    let map = "";
+    let map;
+    let mapLong;
+    let mapLat;
+    let userText;
+    let latLng;
+    let carparkIcon = "../assets/images/car.png";
+    let parkingMapIcons;
+
+
+    let homepage = document.querySelector('#homePage');
+
+    parkingMapIcons = L.icon({
+        iconUrl: carparkIcon,
+        iconSize: [40, 40],
+        iconAnchor: [10, 35],
+        popupAnchor: [-3, -76]
+    })
 
     const createMap = function() {
         const center = L.bounds([1.56073, 104.11475], [1.16, 103.502]).getCenter();
-        map = L.map('mapdiv').setView([center.x, center.y], 11);
+        map = L.map('mapdiv').setView([center.x, center.y], 12);
 
         const basemap = L.tileLayer('https://maps-{s}.onemap.sg/v3/Default/{z}/{x}/{y}.png', {
             detectRetina: true,
@@ -23,9 +38,6 @@ $(document).ready(function() {
         basemap.addTo(map);
         map.invalidateSize();
     }
-
-    createMap();
-
 
 
     const openClose = function() {
@@ -48,8 +60,8 @@ $(document).ready(function() {
 
 
     $('#mapInfoIcon').on('click', function() {
-        let homepage = document.querySelector('#homepage');
         homepage.classList.remove('hidden');
+        $('#mapPage').hide();
     })
 
     $('#userInputBtn').on('click', fetchUserInputAuto);
@@ -69,32 +81,57 @@ $(document).ready(function() {
     });
     openClose();
 
-    function fetchUserInput1() {
-        let userText = $('#userTextInput1').val();
-        console.log(userText);
 
-        let homepage = document.querySelector('#homepage');
+
+    function parkingThemeDetails() {
+
+        const onMapThemeParams = new URLSearchParams({
+            queryName: 'hdb_car_park_information',
+            token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjUzMjksInVzZXJfaWQiOjUzMjksImVtYWlsIjoieGxhenVyZWx4QGdtYWlsLmNvbSIsImZvcmV2ZXIiOmZhbHNlLCJpc3MiOiJodHRwOlwvXC9vbTIuZGZlLm9uZW1hcC5zZ1wvYXBpXC92MlwvdXNlclwvc2Vzc2lvbiIsImlhdCI6MTU5NzY0Nzg4MSwiZXhwIjoxNTk4MDc5ODgxLCJuYmYiOjE1OTc2NDc4ODEsImp0aSI6ImYxN2RlNGQ2YmYxNzMyYjQ5YjM4NTc2YzU5OWM2OGNiIn0.Gnm8uI2a4epvdeBE8lKyU2-JOItCtA7-Ake36tiSOog'
+        });
+        const oneMapThemeURL = `https://developers.onemap.sg/privateapi/themesvc/retrieveTheme?${onMapThemeParams.toString()}`;
+
+
+        fetch(oneMapThemeURL)
+            .then(themeResp => themeResp.json())
+            .then(data => {
+                for (let i = 1; i < data.SrchResults.length; i++) {
+                    latLng = data.SrchResults[i].LatLng;
+                    let geoParts = latLng.split(",");
+                    iconURL = data.SrchResults[i].ICON_NAME;
+                    console.log(latLng);
+                    console.log(iconURL);
+                    // parkingMapIcons = L.icon({
+                    //         iconUrl: iconURL,
+                    //         iconSize: [38, 95],
+                    //         iconAnchor: [22, 94],
+                    //         popupAnchor: [-3, -76]
+                    //     })
+                    // L.marker([latLng], { icon: parkingMapIcons }).addTo(map);
+                    marker = new L.Marker([parseFloat(geoParts[0]), parseFloat(geoParts[1])], { icon: parkingMapIcons }).addTo(map);
+                }
+            })
+    }
+
+
+    function fetchUserInput1() {
+        userText = $('#userTextInput1').val();
+        console.log(userText);
+        $('#mapPage').show();
         homepage.classList.add('hidden');
-        let mappage = document.querySelector('#mapPage');
-        mappage.classList.remove('hidden');
 
         const onMapParams = new URLSearchParams({
             searchVal: userText,
             returnGeom: 'Y',
             getAddrDetails: 'Y'
         })
-
         const oneMapURL = `https://developers.onemap.sg/commonapi/search?${onMapParams.toString()}`;
-        const oneMapThemeURL = `https://developers.onemap.sg/privateapi/themesvc/retrieveTheme?${onMapThemeParams.toString()}`;
-
-        let mapLong;
-        let mapLat;
 
         fetch(oneMapURL)
             .then(response => response.json())
             .then(data => {
-                let mapLat = data.results[0].LATITUDE;
-                let mapLong = data.results[0].LONGTITUDE;
+                mapLat = data.results[0].LATITUDE;
+                mapLong = data.results[0].LONGTITUDE;
                 marker = new L.Marker([mapLat, mapLong], { bounceOnAdd: false }).addTo(map);
                 let popup = L.popup()
                     .setLatLng([mapLat, mapLong])
@@ -102,22 +139,15 @@ $(document).ready(function() {
                     .openOn(map);
                 map.setView([mapLat, mapLong], 17);
                 console.log(mapLat, mapLong);
-                const onMapThemeParams = new URLSearchParams({
-                    queryName: 'hdb_car_park_information',
-                    token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjUzMjksInVzZXJfaWQiOjUzMjksImVtYWlsIjoieGxhenVyZWx4QGdtYWlsLmNvbSIsImZvcmV2ZXIiOmZhbHNlLCJpc3MiOiJodHRwOlwvXC9vbTIuZGZlLm9uZW1hcC5zZ1wvYXBpXC92MlwvdXNlclwvc2Vzc2lvbiIsImlhdCI6MTU5NzY0Nzg4MSwiZXhwIjoxNTk4MDc5ODgxLCJuYmYiOjE1OTc2NDc4ODEsImp0aSI6ImYxN2RlNGQ2YmYxNzMyYjQ5YjM4NTc2YzU5OWM2OGNiIn0.Gnm8uI2a4epvdeBE8lKyU2-JOItCtA7-Ake36tiSOog'
-                });
-                fetch(oneMapThemeURL)
-                    .then(themeResp => {
-                        let latLng = themeResp.SrchResults[1].LatLng;
-                        console.log(latLng);
-                    })
             }).catch(error => console.log(error));
 
     }
 
     function fetchUserInput2() {
-        let userText = $('#userTextInput2').val();
+        userText = $('#userTextInput2').val();
         console.log(userText);
+        $('#mapPage').show();
+        homepage.classList.add('hidden');
 
         const onMapParams = new URLSearchParams({
             searchVal: userText,
@@ -126,14 +156,12 @@ $(document).ready(function() {
         })
         const oneMapURL = `https://developers.onemap.sg/commonapi/search?${onMapParams.toString()}`;
 
-        let mapLong;
-        let mapLat;
 
         fetch(oneMapURL)
             .then(response => response.json())
             .then(data => {
-                let mapLat = data.results[0].LATITUDE;
-                let mapLong = data.results[0].LONGTITUDE;
+                mapLat = data.results[0].LATITUDE;
+                mapLong = data.results[0].LONGTITUDE;
                 marker = new L.Marker([mapLat, mapLong], { bounceOnAdd: false }).addTo(map);
                 let popup = L.popup()
                     .setLatLng([mapLat, mapLong])
@@ -145,11 +173,9 @@ $(document).ready(function() {
     }
 
     function fetchUserInputAuto() {
-        $('#mapPage').show();
         navigator.geolocation.getCurrentPosition(showPosition);
-        let homepage = document.querySelector('#homepage');
+        $('#mapPage').show();
         homepage.classList.add('hidden');
-
 
         function showPosition(position) {
             marker = new L.Marker([position.coords.latitude, position.coords.longitude], {
@@ -163,7 +189,9 @@ $(document).ready(function() {
         }
     }
 
-
+    createMap();
+    parkingThemeDetails();
+    $('#mapPage').hide();
 
     // function ThemeDetails() {
     //     $.$.ajax({
