@@ -7,6 +7,11 @@ $(document).ready(function() {
     let latLng;
     let carparkIcon = "../assets/images/car.png";
     let parkingMapIcons;
+    let carParkType;
+    let shortTermParking;
+    let nightParking;
+    let freeParking;
+    let parkingSystemType;
 
 
     let homepage = document.querySelector('#homePage');
@@ -96,18 +101,23 @@ $(document).ready(function() {
             .then(themeResp => themeResp.json())
             .then(data => {
                 for (let i = 1; i < data.SrchResults.length; i++) {
+                    // Retrieve DATA from OneMap Theme API
                     latLng = data.SrchResults[i].LatLng;
                     let geoParts = latLng.split(",");
                     iconURL = data.SrchResults[i].ICON_NAME;
+                    carParkType = data.SrchResults[i].CAR_PARK_TYPE;
+                    shortTermParking = data.SrchResults[i].SHORT_TERM_PARKING;
+                    nightParking = data.SrchResults[i].NIGHT_PARKING;
+                    freeParking = data.SrchResults[i].FREE_PARKING;
+                    parkingSystemType = data.SrchResults[i].TYPE_OF_PARKING_SYSTEM;
+                    // Testing Data Retrieval
                     console.log(latLng);
                     console.log(iconURL);
-                    // parkingMapIcons = L.icon({
-                    //         iconUrl: iconURL,
-                    //         iconSize: [38, 95],
-                    //         iconAnchor: [22, 94],
-                    //         popupAnchor: [-3, -76]
-                    //     })
-                    // L.marker([latLng], { icon: parkingMapIcons }).addTo(map);
+                    console.log(carParkType);
+                    console.log(shortTermParking);
+                    console.log(nightParking);
+                    console.log(freeParking);
+                    console.log(parkingSystemType);
                     marker = new L.Marker([parseFloat(geoParts[0]), parseFloat(geoParts[1])], { icon: parkingMapIcons }).addTo(map);
                 }
             })
