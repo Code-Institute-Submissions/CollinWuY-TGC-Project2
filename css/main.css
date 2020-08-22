@@ -91,3 +91,8 @@ body {
     border: 1px solid black;
     border-radius: 12px;
 }
+
+#markerPopup ul {
+    list-style-type: none;
+    text-align: left;
+}

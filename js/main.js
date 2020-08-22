@@ -7,6 +7,7 @@ $(document).ready(function() {
     let latLng;
     let carparkIcon = "../assets/images/car.png";
     let parkingMapIcons;
+    let carparkDescription;
     let carParkType;
     let shortTermParking;
     let nightParking;
@@ -105,6 +106,7 @@ $(document).ready(function() {
                     latLng = data.SrchResults[i].LatLng;
                     let geoParts = latLng.split(",");
                     iconURL = data.SrchResults[i].ICON_NAME;
+                    carparkDescription = data.SrchResults[i].DESCRIPTION;
                     carParkType = data.SrchResults[i].CAR_PARK_TYPE;
                     shortTermParking = data.SrchResults[i].SHORT_TERM_PARKING;
                     nightParking = data.SrchResults[i].NIGHT_PARKING;
@@ -119,6 +121,22 @@ $(document).ready(function() {
                     console.log(freeParking);
                     console.log(parkingSystemType);
                     marker = new L.Marker([parseFloat(geoParts[0]), parseFloat(geoParts[1])], { icon: parkingMapIcons }).addTo(map);
+
+                    marker.on('click', function() {
+                        console.log("marker clicked"); //testing on click function on markers
+                        let popup = L.popup()
+                            .setLatLng([parseFloat(geoParts[0]), parseFloat(geoParts[1])])
+                            .setContent(`<div id="markerPopup">
+                                        <ul>
+                                            <li><b>${carparkDescription}</b></li>
+                                            <li><b>Type:</b> ${carParkType}</li>
+                                            <li><b>Parking Limit:</b> ${shortTermParking}</li>
+                                            <li><b>Night Parking:</b> ${nightParking}</li>
+                                            <li><b>Free Parking:</b> ${freeParking}</li>
+                                            <li><b>Cashcard:</b> ${parkingSystemType}</li>
+                                        </div>`)
+                            .openOn(map);
+                    })
                 }
             })
     }
