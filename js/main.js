@@ -5,6 +5,8 @@ $(document).ready(function() {
     let homepage = document.querySelector('#homePage');
     let mapLong;
     let mapLat;
+    let autoLat;
+    let autoLng;
     let userText;
     let latLng;
     let carparkIcon = "../assets/images/car.png";
@@ -193,8 +195,7 @@ $(document).ready(function() {
                         .setContent('You are here!')
                         .openOn(map);
                     map.setView([mapLat, mapLong], 17);
-                    let tlBounds = L.bounds(getTopLeft(), getBottomRight());
-                    console.log(tlBounds);
+                    let circleMarker = new L.circle([mapLat, mapLong], 500).addTo(map);
 
                     console.log(mapLat, mapLong);
                 }).catch(error => console.log(error));
@@ -226,6 +227,7 @@ $(document).ready(function() {
                         .setContent('You are here!')
                         .openOn(map);
                     map.setView([mapLat, mapLong], 17);
+                    let circleMarker = new L.circle([mapLat, mapLong], 500).addTo(map);
                     console.log(mapLat, mapLong);
                 }).catch(error => console.log(error));
         }
@@ -236,14 +238,17 @@ $(document).ready(function() {
             homepage.classList.add('hidden');
 
             function showPosition(position) {
-                marker = new L.Marker([position.coords.latitude, position.coords.longitude], {
+                autoLat = position.coords.latitude;
+                autoLng = position.coords.longitude;
+                marker = new L.Marker([autoLat, autoLng], {
                     bounceOnAdd: false
                 }).addTo(map);
                 var popup = L.popup()
-                    .setLatLng([position.coords.latitude, position.coords.longitude])
+                    .setLatLng([autoLat, autoLng])
                     .setContent('You are here!')
                     .openOn(map);
-                map.setView([position.coords.latitude, position.coords.longitude], 18);
+                map.setView([autoLat, autoLng], 17);
+                let circleMarker = new L.circle([autoLat, autoLng], 500).addTo(map);
             }
         }
 
