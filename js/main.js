@@ -9,7 +9,7 @@ $(document).ready(function() {
     let autoLng;
     let userText;
     let latLng;
-    let carparkIcon = "../assets/images/car.png";
+    let carparkIcon = "../TGC-Project2/assets/images/car.png";
     let parkingMapIcons;
     let carparkDescription;
     let carParkType;
