@@ -112,9 +112,6 @@ $(document).ready(function() {
         $('#userTextInput2').keydown(function(e) {
             let keyPressed = event.keyCode || event.which;
             if (keyPressed === 13) {
-                map.off();
-                map.remove();
-                createMap();
                 fetchUserInput2();
                 $('#userTextInput2').val("");
             }
