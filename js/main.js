@@ -10,7 +10,7 @@ $(document).ready(function() {
     let userText;
     let latLng = [];
     let geoParts = [];
-    let carparkIcon = "../TGC-Project2/assets/images/car.png";
+    let carparkIcon = "../assets/images/car.png";
     let parkingMapIcons;
     let carparkDescription = [];
     let carParkType = [];
@@ -270,9 +270,9 @@ $(document).ready(function() {
                     .setContent('You are here!')
                     .openOn(map);
                 map.setView([autoLat, autoLng], 17);
-                let circleMarker = new L.circle([autoLat, autoLng], 500).addTo(map);
+                let circleMarker = new L.circle([mapLat, mapLong], 500).addTo(map);
                 map.fitBounds(circleMarker.getBounds());
-                parkingThemeDetails(circleMarker);
+                setMarkerInfo(circleMarker);
                 console.log(autoLat, autoLng);
             }
         }
