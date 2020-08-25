@@ -8,15 +8,16 @@ $(document).ready(function() {
     let autoLat;
     let autoLng;
     let userText;
-    let latLng;
-    let carparkIcon = "../TGC-Project2/assets/images/car.png";
+    let latLng = [];
+    let geoParts = [];
+    let carparkIcon = "../assets/images/car.png";
     let parkingMapIcons;
-    let carparkDescription;
-    let carParkType;
-    let shortTermParking;
-    let nightParking;
-    let freeParking;
-    let parkingSystemType;
+    let carparkDescription = [];
+    let carParkType = [];
+    let shortTermParking = [];
+    let nightParking = [];
+    let freeParking = [];
+    let parkingSystemType = [];
 
     //Api Key Generation
     var form = new FormData();
@@ -127,46 +128,55 @@ $(document).ready(function() {
                 .then(data => {
                     for (let i = 1; i < data.SrchResults.length; i++) {
                         // Retrieve DATA from OneMap Theme API
-                        latLng = data.SrchResults[i].LatLng;
-                        let geoParts = latLng.split(",");
+                        latLng.push(data.SrchResults[i].LatLng);
                         iconURL = data.SrchResults[i].ICON_NAME;
-                        carparkDescription = data.SrchResults[i].DESCRIPTION;
-                        carParkType = data.SrchResults[i].CAR_PARK_TYPE;
-                        shortTermParking = data.SrchResults[i].SHORT_TERM_PARKING;
-                        nightParking = data.SrchResults[i].NIGHT_PARKING;
-                        freeParking = data.SrchResults[i].FREE_PARKING;
-                        parkingSystemType = data.SrchResults[i].TYPE_OF_PARKING_SYSTEM;
+                        carparkDescription.push(data.SrchResults[i].DESCRIPTION);
+                        carParkType.push(data.SrchResults[i].CAR_PARK_TYPE);
+                        shortTermParking.push(data.SrchResults[i].SHORT_TERM_PARKING);
+                        nightParking.push(data.SrchResults[i].NIGHT_PARKING);
+                        freeParking.push(data.SrchResults[i].FREE_PARKING);
+                        parkingSystemType.push(data.SrchResults[i].TYPE_OF_PARKING_SYSTEM);
+                    }
+                    // Testing Data Retrieval
+                    /*
+                    console.log(latLng);
+                    console.log(iconURL);
+                    console.log(carParkType);
+                    console.log(shortTermParking);
+                    console.log(nightParking);
+                    console.log(freeParking);
+                    console.log(parkingSystemType);
+                    */
 
-                        // Testing Data Retrieval
-                        /*
-                        console.log(latLng);
-                        console.log(iconURL);
-                        console.log(carParkType);
-                        console.log(shortTermParking);
-                        console.log(nightParking);
-                        console.log(freeParking);
-                        console.log(parkingSystemType);
-                        */
+                    //Map Marker Creation for each data
+                    for (let i = 0; i < latLng.length; i++) {
+                        geoParts.push(latLng[i].split(","));
+                        console.log(geoParts);
+                    }
 
-                        //Map Marker Creation for each data
-                        marker = new L.Marker([parseFloat(geoParts[0]), parseFloat(geoParts[1])], { icon: parkingMapIcons }).addTo(map);
+                    for (let i = 0; i < geoParts.length; i++) {
+                        marker = new L.Marker([parseFloat(geoParts[i][0]), parseFloat(geoParts[i][1])], { icon: parkingMapIcons }).addTo(map);
 
                         marker.on('click', function() {
                             console.log("marker clicked"); //testing on click function on markers
                             let popup = L.popup()
-                                .setLatLng([parseFloat(geoParts[0]), parseFloat(geoParts[1])])
+                                .setLatLng([parseFloat(geoParts[i][0]), parseFloat(geoParts[i][1])])
                                 .setContent(`<div id="markerPopup">
                                         <ul>
-                                            <li><b>${carparkDescription}</b></li>
-                                            <li><b>Type:</b> ${carParkType}</li>
-                                            <li><b>Parking Limit:</b> ${shortTermParking}</li>
-                                            <li><b>Night Parking:</b> ${nightParking}</li>
-                                            <li><b>Free Parking:</b> ${freeParking}</li>
-                                            <li><b>Cashcard:</b> ${parkingSystemType}</li>
+                                            <li><b>${carparkDescription[i]}</b></li>
+                                            <li><b>Type:</b> ${carParkType[i]}</li>
+                                            <li><b>Parking Limit:</b> ${shortTermParking[i]}</li>
+                                            <li><b>Night Parking:</b> ${nightParking[i]}</li>
+                                            <li><b>Free Parking:</b> ${freeParking[i]}</li>
+                                            <li><b>Cashcard:</b> ${parkingSystemType[i]}</li>
                                         </div>`)
                                 .openOn(map);
+
                         })
+
                     }
+
+
                 })
         }
 
@@ -196,6 +206,7 @@ $(document).ready(function() {
                         .openOn(map);
                     map.setView([mapLat, mapLong], 17);
                     let circleMarker = new L.circle([mapLat, mapLong], 500).addTo(map);
+                    let bounds = circleMarker.getBounds();
 
                     console.log(mapLat, mapLong);
                 }).catch(error => console.log(error));
