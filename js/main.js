@@ -270,7 +270,7 @@ $(document).ready(function() {
                     .setContent('You are here!')
                     .openOn(map);
                 map.setView([autoLat, autoLng], 17);
-                let circleMarker = new L.circle([mapLat, mapLong], 500).addTo(map);
+                let circleMarker = new L.circle([autoLat, autoLong], 500).addTo(map);
                 map.fitBounds(circleMarker.getBounds());
                 setMarkerInfo(circleMarker);
                 console.log(autoLat, autoLng);
