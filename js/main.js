@@ -216,7 +216,8 @@ $(document).ready(function() {
                     map.setView([mapLat, mapLong], 17);
                     let circleMarker = new L.circle([mapLat, mapLong], 500).addTo(map);
                     map.fitBounds(circleMarker.getBounds());
-                    parkingThemeDetails(circleMarker);
+                    setMarkerInfo(circleMarker);
+                    console.log(latLng);
                     console.log(mapLat, mapLong);
                 }).catch(error => console.log(error));
 
@@ -246,7 +247,8 @@ $(document).ready(function() {
                     map.setView([mapLat, mapLong], 17);
                     let circleMarker = new L.circle([mapLat, mapLong], 500).addTo(map);
                     map.fitBounds(circleMarker.getBounds());
-                    parkingThemeDetails(circleMarker);
+                    setMarkerInfo(circleMarker);
+                    console.log(latLng);
                     console.log(mapLat, mapLong);
                 }).catch(error => console.log(error));
         }
@@ -276,7 +278,7 @@ $(document).ready(function() {
         }
 
 
-        function parkingThemeDetails(circleMarker) {
+        function parkingThemeDetails() {
             let onMapThemeParams = new URLSearchParams({
                 queryName: 'hdb_car_park_information',
                 token: apiToken
@@ -315,13 +317,18 @@ $(document).ready(function() {
                         // console.log(geoParts);
                     }
 
-                    for (let i = 0; i < geoParts.length; i++) {
-                        themeMarker = new L.Marker([parseFloat(geoParts[i][0]), parseFloat(geoParts[i][1])], { icon: parkingMapIcons });
-                        themeMarker.on('click', function() {
-                            console.log("marker clicked"); //testing on click function on markers
-                            let popup = L.popup()
-                                .setLatLng([parseFloat(geoParts[i][0]), parseFloat(geoParts[i][1])])
-                                .setContent(`<div id="markerPopup">
+                })
+
+        }
+
+        function setMarkerInfo(circleMarker) {
+            for (let i = 0; i < geoParts.length; i++) {
+                themeMarker = new L.Marker([parseFloat(geoParts[i][0]), parseFloat(geoParts[i][1])], { icon: parkingMapIcons });
+                themeMarker.on('click', function() {
+                    console.log("marker clicked"); //testing on click function on markers
+                    let popup = L.popup()
+                        .setLatLng([parseFloat(geoParts[i][0]), parseFloat(geoParts[i][1])])
+                        .setContent(`<div id="markerPopup">
                                         <ul>
                                             <li><b>${carparkDescription[i]}</b></li>
                                             <li><b>Type:</b> ${carParkType[i]}</li>
@@ -330,22 +337,21 @@ $(document).ready(function() {
                                             <li><b>Free Parking:</b> ${freeParking[i]}</li>
                                             <li><b>Cashcard:</b> ${parkingSystemType[i]}</li>
                                         </div>`)
-                                .openOn(map);
-
-                        })
-                        if (circleMarker.contains(themeMarker.getLatLng()) == true) {
-                            themeMarker.addTo(map);
-                        }
-
-                    }
-
+                        .openOn(map);
 
                 })
+                if (circleMarker.contains(themeMarker.getLatLng()) == true) {
+                    themeMarker.addTo(map);
+                }
 
+            }
         }
 
+
+
+
         createMap();
-        // parkingThemeDetails();
+        parkingThemeDetails();
         $('#mapPage').hide();
 
 
