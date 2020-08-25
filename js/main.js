@@ -19,6 +19,12 @@ $(document).ready(function() {
     let freeParking = [];
     let parkingSystemType = [];
 
+    L.Circle.include({
+        contains: function(latLng) {
+            return this.getLatLng().distanceTo(latLng) < this.getRadius();
+        }
+    });
+
     //Api Key Generation
     var form = new FormData();
     form.append("email", "xlazurelx@gmail.com");
@@ -106,6 +112,9 @@ $(document).ready(function() {
         $('#userTextInput2').keydown(function(e) {
             let keyPressed = event.keyCode || event.which;
             if (keyPressed === 13) {
+                map.off();
+                map.remove();
+                createMap();
                 fetchUserInput2();
                 $('#userTextInput2').val("");
             }
@@ -114,13 +123,165 @@ $(document).ready(function() {
 
 
 
-        function parkingThemeDetails() {
+        // function parkingThemeDetails() {
 
-            const onMapThemeParams = new URLSearchParams({
+        //     const onMapThemeParams = new URLSearchParams({
+        //         queryName: 'hdb_car_park_information',
+        //         token: apiToken
+        //     });
+        //     const oneMapThemeURL = `https://developers.onemap.sg/privateapi/themesvc/retrieveTheme?${onMapThemeParams.toString()}`;
+
+        //     fetch(oneMapThemeURL)
+        //         .then(themeResp => themeResp.json())
+        //         .then(data => {
+        //             for (let i = 1; i < data.SrchResults.length; i++) {
+        //                 // Retrieve DATA from OneMap Theme API
+        //                 latLng.push(data.SrchResults[i].LatLng);
+        //                 iconURL = data.SrchResults[i].ICON_NAME;
+        //                 carparkDescription.push(data.SrchResults[i].DESCRIPTION);
+        //                 carParkType.push(data.SrchResults[i].CAR_PARK_TYPE);
+        //                 shortTermParking.push(data.SrchResults[i].SHORT_TERM_PARKING);
+        //                 nightParking.push(data.SrchResults[i].NIGHT_PARKING);
+        //                 freeParking.push(data.SrchResults[i].FREE_PARKING);
+        //                 parkingSystemType.push(data.SrchResults[i].TYPE_OF_PARKING_SYSTEM);
+        //             }
+        //             // Testing Data Retrieval
+        //             /*
+        //             console.log(latLng);
+        //             console.log(iconURL);
+        //             console.log(carParkType);
+        //             console.log(shortTermParking);
+        //             console.log(nightParking);
+        //             console.log(freeParking);
+        //             console.log(parkingSystemType);
+        //             */
+
+        //             //Map Marker Creation for each data
+        //             for (let i = 0; i < latLng.length; i++) {
+        //                 geoParts.push(latLng[i].split(","));
+        //                 // console.log(geoParts);
+        //             }
+
+        //             for (let i = 0; i < geoParts.length; i++) {
+        //                 themeMarker = new L.Marker([parseFloat(geoParts[i][0]), parseFloat(geoParts[i][1])], { icon: parkingMapIcons });
+
+
+
+        //                 themeMarker.on('click', function () {
+        //                     console.log("marker clicked"); //testing on click function on markers
+        //                     let popup = L.popup()
+        //                         .setLatLng([parseFloat(geoParts[i][0]), parseFloat(geoParts[i][1])])
+        //                         .setContent(`<div id="markerPopup">
+        //                                 <ul>
+        //                                     <li><b>${carparkDescription[i]}</b></li>
+        //                                     <li><b>Type:</b> ${carParkType[i]}</li>
+        //                                     <li><b>Parking Limit:</b> ${shortTermParking[i]}</li>
+        //                                     <li><b>Night Parking:</b> ${nightParking[i]}</li>
+        //                                     <li><b>Free Parking:</b> ${freeParking[i]}</li>
+        //                                     <li><b>Cashcard:</b> ${parkingSystemType[i]}</li>
+        //                                 </div>`)
+        //                         .openOn(map);
+
+        //                 })
+
+        //             }
+
+
+        //         })
+        // }
+
+        function fetchUserInput1() {
+            userText = $('#userTextInput1').val();
+            console.log(userText);
+            $('#mapPage').show();
+            homepage.classList.add('hidden');
+
+            let onMapParams = new URLSearchParams({
+                searchVal: userText,
+                returnGeom: 'Y',
+                getAddrDetails: 'Y'
+            })
+            let oneMapURL = `https://developers.onemap.sg/commonapi/search?${onMapParams.toString()}`;
+
+            fetch(oneMapURL)
+                .then(response => response.json())
+                .then(data => {
+                    mapLat = data.results[0].LATITUDE;
+                    mapLong = data.results[0].LONGTITUDE;
+                    marker = new L.Marker([mapLat, mapLong], { bounceOnAdd: false }).addTo(map);
+                    let popup = L.popup()
+                        .setLatLng([mapLat, mapLong])
+                        .setContent('You are here!')
+                        .openOn(map);
+                    map.setView([mapLat, mapLong], 17);
+                    let circleMarker = new L.circle([mapLat, mapLong], 500).addTo(map);
+                    map.fitBounds(circleMarker.getBounds());
+                    parkingThemeDetails(circleMarker);
+                    console.log(mapLat, mapLong);
+                }).catch(error => console.log(error));
+
+        }
+
+        function fetchUserInput2() {
+            userText = $('#userTextInput2').val();
+            console.log(userText);
+
+            let onMapParams = new URLSearchParams({
+                searchVal: userText,
+                returnGeom: 'Y',
+                getAddrDetails: 'Y'
+            })
+            let oneMapURL = `https://developers.onemap.sg/commonapi/search?${onMapParams.toString()}`;
+
+            fetch(oneMapURL)
+                .then(response => response.json())
+                .then(data => {
+                    mapLat = data.results[0].LATITUDE;
+                    mapLong = data.results[0].LONGTITUDE;
+                    marker = new L.Marker([mapLat, mapLong], { bounceOnAdd: false }).addTo(map);
+                    let popup = L.popup()
+                        .setLatLng([mapLat, mapLong])
+                        .setContent('You are here!')
+                        .openOn(map);
+                    map.setView([mapLat, mapLong], 17);
+                    let circleMarker = new L.circle([mapLat, mapLong], 500).addTo(map);
+                    map.fitBounds(circleMarker.getBounds());
+                    parkingThemeDetails(circleMarker);
+                    console.log(mapLat, mapLong);
+                }).catch(error => console.log(error));
+        }
+
+
+        function fetchUserInputAuto() {
+            navigator.geolocation.getCurrentPosition(showPosition);
+            $('#mapPage').show();
+            homepage.classList.add('hidden');
+
+            function showPosition(position) {
+                autoLat = position.coords.latitude;
+                autoLng = position.coords.longitude;
+                marker = new L.Marker([autoLat, autoLng], {
+                    bounceOnAdd: false
+                }).addTo(map);
+                var popup = L.popup()
+                    .setLatLng([autoLat, autoLng])
+                    .setContent('You are here!')
+                    .openOn(map);
+                map.setView([autoLat, autoLng], 17);
+                let circleMarker = new L.circle([autoLat, autoLng], 500).addTo(map);
+                map.fitBounds(circleMarker.getBounds());
+                parkingThemeDetails(circleMarker);
+                console.log(autoLat, autoLng);
+            }
+        }
+
+
+        function parkingThemeDetails(circleMarker) {
+            let onMapThemeParams = new URLSearchParams({
                 queryName: 'hdb_car_park_information',
                 token: apiToken
             });
-            const oneMapThemeURL = `https://developers.onemap.sg/privateapi/themesvc/retrieveTheme?${onMapThemeParams.toString()}`;
+            let oneMapThemeURL = `https://developers.onemap.sg/privateapi/themesvc/retrieveTheme?${onMapThemeParams.toString()}`;
 
 
             fetch(oneMapThemeURL)
@@ -129,7 +290,7 @@ $(document).ready(function() {
                     for (let i = 1; i < data.SrchResults.length; i++) {
                         // Retrieve DATA from OneMap Theme API
                         latLng.push(data.SrchResults[i].LatLng);
-                        iconURL = data.SrchResults[i].ICON_NAME;
+                        // iconURL = data.SrchResults[i].ICON_NAME;
                         carparkDescription.push(data.SrchResults[i].DESCRIPTION);
                         carParkType.push(data.SrchResults[i].CAR_PARK_TYPE);
                         shortTermParking.push(data.SrchResults[i].SHORT_TERM_PARKING);
@@ -151,13 +312,12 @@ $(document).ready(function() {
                     //Map Marker Creation for each data
                     for (let i = 0; i < latLng.length; i++) {
                         geoParts.push(latLng[i].split(","));
-                        console.log(geoParts);
+                        // console.log(geoParts);
                     }
 
                     for (let i = 0; i < geoParts.length; i++) {
-                        marker = new L.Marker([parseFloat(geoParts[i][0]), parseFloat(geoParts[i][1])], { icon: parkingMapIcons }).addTo(map);
-
-                        marker.on('click', function() {
+                        themeMarker = new L.Marker([parseFloat(geoParts[i][0]), parseFloat(geoParts[i][1])], { icon: parkingMapIcons });
+                        themeMarker.on('click', function() {
                             console.log("marker clicked"); //testing on click function on markers
                             let popup = L.popup()
                                 .setLatLng([parseFloat(geoParts[i][0]), parseFloat(geoParts[i][1])])
@@ -173,112 +333,22 @@ $(document).ready(function() {
                                 .openOn(map);
 
                         })
+                        if (circleMarker.contains(themeMarker.getLatLng()) == true) {
+                            themeMarker.addTo(map);
+                        }
 
                     }
 
 
                 })
-        }
 
-
-        function fetchUserInput1() {
-            userText = $('#userTextInput1').val();
-            console.log(userText);
-            $('#mapPage').show();
-            homepage.classList.add('hidden');
-
-            const onMapParams = new URLSearchParams({
-                searchVal: userText,
-                returnGeom: 'Y',
-                getAddrDetails: 'Y'
-            })
-            const oneMapURL = `https://developers.onemap.sg/commonapi/search?${onMapParams.toString()}`;
-
-            fetch(oneMapURL)
-                .then(response => response.json())
-                .then(data => {
-                    mapLat = data.results[0].LATITUDE;
-                    mapLong = data.results[0].LONGTITUDE;
-                    marker = new L.Marker([mapLat, mapLong], { bounceOnAdd: false }).addTo(map);
-                    let popup = L.popup()
-                        .setLatLng([mapLat, mapLong])
-                        .setContent('You are here!')
-                        .openOn(map);
-                    map.setView([mapLat, mapLong], 17);
-                    let circleMarker = new L.circle([mapLat, mapLong], 500).addTo(map);
-                    let bounds = circleMarker.getBounds();
-
-                    console.log(mapLat, mapLong);
-                }).catch(error => console.log(error));
-
-        }
-
-        function fetchUserInput2() {
-            userText = $('#userTextInput2').val();
-            console.log(userText);
-            $('#mapPage').show();
-            homepage.classList.add('hidden');
-
-            const onMapParams = new URLSearchParams({
-                searchVal: userText,
-                returnGeom: 'Y',
-                getAddrDetails: 'Y'
-            })
-            const oneMapURL = `https://developers.onemap.sg/commonapi/search?${onMapParams.toString()}`;
-
-
-            fetch(oneMapURL)
-                .then(response => response.json())
-                .then(data => {
-                    mapLat = data.results[0].LATITUDE;
-                    mapLong = data.results[0].LONGTITUDE;
-                    marker = new L.Marker([mapLat, mapLong], { bounceOnAdd: false }).addTo(map);
-                    let popup = L.popup()
-                        .setLatLng([mapLat, mapLong])
-                        .setContent('You are here!')
-                        .openOn(map);
-                    map.setView([mapLat, mapLong], 17);
-                    let circleMarker = new L.circle([mapLat, mapLong], 500).addTo(map);
-                    console.log(mapLat, mapLong);
-                }).catch(error => console.log(error));
-        }
-
-        function fetchUserInputAuto() {
-            navigator.geolocation.getCurrentPosition(showPosition);
-            $('#mapPage').show();
-            homepage.classList.add('hidden');
-
-            function showPosition(position) {
-                autoLat = position.coords.latitude;
-                autoLng = position.coords.longitude;
-                marker = new L.Marker([autoLat, autoLng], {
-                    bounceOnAdd: false
-                }).addTo(map);
-                var popup = L.popup()
-                    .setLatLng([autoLat, autoLng])
-                    .setContent('You are here!')
-                    .openOn(map);
-                map.setView([autoLat, autoLng], 17);
-                let circleMarker = new L.circle([autoLat, autoLng], 500).addTo(map);
-            }
         }
 
         createMap();
-        parkingThemeDetails();
+        // parkingThemeDetails();
         $('#mapPage').hide();
 
-        // function ThemeDetails() {
-        //     $.$.ajax({
-        //         url: 'https://developers.onemap.sg/privateapi/themesvc/retrieveTheme?queryName=hdb_car_park_information&token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjUzMjksInVzZXJfaWQiOjUzMjksImVtYWlsIjoieGxhenVyZWx4QGdtYWlsLmNvbSIsImZvcmV2ZXIiOmZhbHNlLCJpc3MiOiJodHRwOlwvXC9vbTIuZGZlLm9uZW1hcC5zZ1wvYXBpXC92MlwvdXNlclwvc2Vzc2lvbiIsImlhdCI6MTU5NzY0Nzg4MSwiZXhwIjoxNTk4MDc5ODgxLCJuYmYiOjE1OTc2NDc4ODEsImp0aSI6ImYxN2RlNGQ2YmYxNzMyYjQ5YjM4NTc2YzU5OWM2OGNiIn0.Gnm8uI2a4epvdeBE8lKyU2-JOItCtA7-Ake36tiSOog',
-        //         success: function(result) {
-        //             //Set result to a variable for writing
-        //             var TrueResult = JSON.stringify(result);
-        //             document.write(TrueResult);
-        //         }
-        //     });
-        // }
 
-        // ThemeDetails();
     });
 
 })
