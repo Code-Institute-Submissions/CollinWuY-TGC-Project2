@@ -15,7 +15,7 @@ $(document).ready(function() {
     let availableLots = [];
     let latLng = [];
     let geoParts = [];
-    let carparkIcon = "../assets/images/car.png";
+    let carparkIcon = "../TGC-Project2/assets/images/car.png";
     let parkingMapIcons;
     let carparkDescription = [];
     let carParkType = [];
@@ -167,10 +167,10 @@ $(document).ready(function() {
                         totalLots.push(data.items[0].carpark_data[i].carpark_info[0].total_lots);
                         availableLots.push(data.items[0].carpark_data[i].carpark_info[0].lots_available);
                     }
-                    console.log(carParkNumber);
-                    console.log(totalLots);
-                    console.log(availableLots);
-                    console.log(data);
+                    // console.log(carParkNumber);
+                    // console.log(totalLots);
+                    // console.log(availableLots);
+                    // console.log(data);
                 })
 
             //     {
