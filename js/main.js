@@ -76,6 +76,79 @@ $(document).ready(function() {
             map.invalidateSize();
         }
 
+        function parkingThemeDetails() {
+            let onMapThemeParams = new URLSearchParams({
+                queryName: 'hdb_car_park_information',
+                token: apiToken
+            });
+            let oneMapThemeURL = `https://developers.onemap.sg/privateapi/themesvc/retrieveTheme?${onMapThemeParams.toString()}`;
+
+
+            fetch(oneMapThemeURL)
+                .then(themeResp => themeResp.json())
+                .then(data => {
+                    for (let i = 1; i < data.SrchResults.length; i++) {
+                        // Retrieve DATA from OneMap Theme API
+                        latLng.push(data.SrchResults[i].LatLng);
+                        // iconURL = data.SrchResults[i].ICON_NAME;
+                        carparkDescription.push(data.SrchResults[i].DESCRIPTION);
+                        carParkType.push(data.SrchResults[i].CAR_PARK_TYPE);
+                        shortTermParking.push(data.SrchResults[i].SHORT_TERM_PARKING);
+                        nightParking.push(data.SrchResults[i].NIGHT_PARKING);
+                        freeParking.push(data.SrchResults[i].FREE_PARKING);
+                        parkingSystemType.push(data.SrchResults[i].TYPE_OF_PARKING_SYSTEM);
+                    }
+                    // Testing Data Retrieval
+                    /*
+                    console.log(latLng);
+                    console.log(iconURL);
+                    console.log(carParkType);
+                    console.log(shortTermParking);
+                    console.log(nightParking);
+                    console.log(freeParking);
+                    console.log(parkingSystemType);
+                    */
+
+                    //Map Marker Creation for each data
+                    for (let i = 0; i < latLng.length; i++) {
+                        geoParts.push(latLng[i].split(","));
+                        // console.log(geoParts);
+                    }
+
+                })
+
+        }
+
+        function setMarkerInfo(circleMarker) {
+            for (let i = 0; i < geoParts.length; i++) {
+                themeMarker = new L.Marker([parseFloat(geoParts[i][0]), parseFloat(geoParts[i][1])], { icon: parkingMapIcons });
+                themeMarker.on('click', function() {
+                    console.log("marker clicked"); //testing on click function on markers
+                    let popup = L.popup()
+                        .setLatLng([parseFloat(geoParts[i][0]), parseFloat(geoParts[i][1])])
+                        .setContent(`<div id="markerPopup">
+                                        <ul>
+                                            <li><b>${carparkDescription[i]}</b></li>
+                                            <li><b>Type:</b> ${carParkType[i]}</li>
+                                            <li><b>Parking Limit:</b> ${shortTermParking[i]}</li>
+                                            <li><b>Night Parking:</b> ${nightParking[i]}</li>
+                                            <li><b>Free Parking:</b> ${freeParking[i]}</li>
+                                            <li><b>Cashcard:</b> ${parkingSystemType[i]}</li>
+                                        </div>`)
+                        .openOn(map);
+
+                })
+                if (circleMarker.contains(themeMarker.getLatLng()) == true) {
+                    themeMarker.addTo(map);
+                }
+
+            }
+        }
+
+        createMap();
+        parkingThemeDetails();
+        $('#mapPage').hide();
+
 
         const openClose = function() {
             let action = 1;
@@ -259,9 +332,7 @@ $(document).ready(function() {
             function showPosition(position) {
                 autoLat = position.coords.latitude;
                 autoLng = position.coords.longitude;
-                marker = new L.Marker([autoLat, autoLng], {
-                    bounceOnAdd: false
-                }).addTo(map);
+                marker = new L.Marker([autoLat, autoLng], { bounceOnAdd: false }).addTo(map);
                 var popup = L.popup()
                     .setLatLng([autoLat, autoLng])
                     .setContent('You are here!')
@@ -275,81 +346,13 @@ $(document).ready(function() {
         }
 
 
-        function parkingThemeDetails() {
-            let onMapThemeParams = new URLSearchParams({
-                queryName: 'hdb_car_park_information',
-                token: apiToken
-            });
-            let oneMapThemeURL = `https://developers.onemap.sg/privateapi/themesvc/retrieveTheme?${onMapThemeParams.toString()}`;
-
-
-            fetch(oneMapThemeURL)
-                .then(themeResp => themeResp.json())
-                .then(data => {
-                    for (let i = 1; i < data.SrchResults.length; i++) {
-                        // Retrieve DATA from OneMap Theme API
-                        latLng.push(data.SrchResults[i].LatLng);
-                        // iconURL = data.SrchResults[i].ICON_NAME;
-                        carparkDescription.push(data.SrchResults[i].DESCRIPTION);
-                        carParkType.push(data.SrchResults[i].CAR_PARK_TYPE);
-                        shortTermParking.push(data.SrchResults[i].SHORT_TERM_PARKING);
-                        nightParking.push(data.SrchResults[i].NIGHT_PARKING);
-                        freeParking.push(data.SrchResults[i].FREE_PARKING);
-                        parkingSystemType.push(data.SrchResults[i].TYPE_OF_PARKING_SYSTEM);
-                    }
-                    // Testing Data Retrieval
-                    /*
-                    console.log(latLng);
-                    console.log(iconURL);
-                    console.log(carParkType);
-                    console.log(shortTermParking);
-                    console.log(nightParking);
-                    console.log(freeParking);
-                    console.log(parkingSystemType);
-                    */
-
-                    //Map Marker Creation for each data
-                    for (let i = 0; i < latLng.length; i++) {
-                        geoParts.push(latLng[i].split(","));
-                        // console.log(geoParts);
-                    }
-
-                })
-
-        }
-
-        function setMarkerInfo(circleMarker) {
-            for (let i = 0; i < geoParts.length; i++) {
-                themeMarker = new L.Marker([parseFloat(geoParts[i][0]), parseFloat(geoParts[i][1])], { icon: parkingMapIcons });
-                themeMarker.on('click', function() {
-                    console.log("marker clicked"); //testing on click function on markers
-                    let popup = L.popup()
-                        .setLatLng([parseFloat(geoParts[i][0]), parseFloat(geoParts[i][1])])
-                        .setContent(`<div id="markerPopup">
-                                        <ul>
-                                            <li><b>${carparkDescription[i]}</b></li>
-                                            <li><b>Type:</b> ${carParkType[i]}</li>
-                                            <li><b>Parking Limit:</b> ${shortTermParking[i]}</li>
-                                            <li><b>Night Parking:</b> ${nightParking[i]}</li>
-                                            <li><b>Free Parking:</b> ${freeParking[i]}</li>
-                                            <li><b>Cashcard:</b> ${parkingSystemType[i]}</li>
-                                        </div>`)
-                        .openOn(map);
-
-                })
-                if (circleMarker.contains(themeMarker.getLatLng()) == true) {
-                    themeMarker.addTo(map);
-                }
-
-            }
-        }
 
 
 
 
-        createMap();
-        parkingThemeDetails();
-        $('#mapPage').hide();
+
+
+
 
 
     });
