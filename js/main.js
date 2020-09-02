@@ -23,6 +23,7 @@ $(document).ready(function() {
     let nightParking = [];
     let freeParking = [];
     let parkingSystemType = [];
+    let compoundData = [];
 
     let date = new Date();
     let dateYr = date.getFullYear();
@@ -79,6 +80,7 @@ $(document).ready(function() {
         map.invalidateSize();
     }
 
+    //Map creation function call then hiding map to give 1 page look
     createMap();
     $('#mapPage').hide();
 
@@ -107,99 +109,133 @@ $(document).ready(function() {
         //console.log(responseJson); //checking JSON format
         //console.log(apiToken); //checking api key
 
-        function parkingThemeDetails() {
-            let onMapThemeParams = new URLSearchParams({
-                queryName: 'hdb_car_park_information',
-                token: apiToken
+        // async function parkingThemeDetails() {
+        let onMapThemeParams = new URLSearchParams({
+            queryName: 'hdb_car_park_information',
+            token: apiToken
+        });
+
+        let oneMapThemeURL = `https://developers.onemap.sg/privateapi/themesvc/retrieveTheme?${onMapThemeParams.toString()}`;
+        let dataSgURL = `https://api.data.gov.sg/v1/transport/carpark-availability?${dateTime}`;
+
+        //Reset all arrays for oneMapTheme API
+        carparkName = [];
+        latLng = [];
+        carparkDescription = [];
+        carParkType = [];
+        shortTermParking = [];
+        nightParking = [];
+        freeParking = [];
+        parkingSystemType = [];
+
+        //Reset all arrays for Data SG API
+        carParkNumber = [];
+        totalLots = [];
+        availableLots = [];
+
+        // ES6 Fetch API for oneMapThemeURL
+        fetch(oneMapThemeURL)
+            .then(themeResp => themeResp.json())
+            .then(data => {
+                for (let i = 1; i < data.SrchResults.length; i++) {
+                    // Retrieve DATA from OneMap Theme API
+                    carparkName.push(data.SrchResults[i].NAME);
+                    latLng.push(data.SrchResults[i].LatLng);
+                    carparkDescription.push(data.SrchResults[i].DESCRIPTION);
+                    carParkType.push(data.SrchResults[i].CAR_PARK_TYPE);
+                    shortTermParking.push(data.SrchResults[i].SHORT_TERM_PARKING);
+                    nightParking.push(data.SrchResults[i].NIGHT_PARKING);
+                    freeParking.push(data.SrchResults[i].FREE_PARKING);
+                    parkingSystemType.push(data.SrchResults[i].TYPE_OF_PARKING_SYSTEM);
+                    // iconURL = data.SrchResults[i].ICON_NAME; //returns 404
+                }
+
+                // Testing Data Retrieval
+
+                // console.log(latLng);
+                // console.log(iconURL);
+                // console.log(carParkType);
+                // console.log(shortTermParking);
+                // console.log(nightParking);
+                // console.log(freeParking);
+                // console.log(parkingSystemType);
+
+                //Map Marker Creation for each data
+                for (let i = 0; i < latLng.length; i++) {
+
+                    let geo = (latLng[i].split(","));
+                    geoParts.push({ "lat": geo[0], "lng": geo[1] })
+                }
+                // console.log(geoParts);
+                // console.log(geoParts[0].lat);
+                // console.log(geoParts[0].lng);
             });
 
-            let oneMapThemeURL = `https://developers.onemap.sg/privateapi/themesvc/retrieveTheme?${onMapThemeParams.toString()}`;
-            let dataSgURL = `https://api.data.gov.sg/v1/transport/carpark-availability?${dateTime}`;
+        fetch(dataSgURL)
+            .then(res => res.json())
+            .then(data => {
+                for (let i = 0; i < data.items[0].carpark_data.length; i++) {
+                    carParkNumber.push(data.items[0].carpark_data[i].carpark_number);
+                    totalLots.push(data.items[0].carpark_data[i].carpark_info[0].total_lots);
+                    availableLots.push(data.items[0].carpark_data[i].carpark_info[0].lots_available);
+                }
+                // console.log(carParkNumber);
+                // console.log(totalLots);
+                // console.log(availableLots);
+                // console.log(data);
+            });
 
-            //Reset all arrays for oneMapTheme API
-            carparkName = [];
-            latLng = [];
-            carparkDescription = [];
-            carParkType = [];
-            shortTermParking = [];
-            nightParking = [];
-            freeParking = [];
-            parkingSystemType = [];
+        // console.log(carparkName);
 
-            //Reset all arrays for Data SG API
-            carParkNumber = [];
-            totalLots = [];
-            availableLots = [];
+        for (let i = 0; i < carparkName.length; i++) {
+            console.log(x);
+        };
 
+        // carparkName.forEach(function(x) {
+        //     console.log(x);
+        // });
+        // }
 
-            fetch(oneMapThemeURL)
-                .then(themeResp => themeResp.json())
-                .then(data => {
-                    for (let i = 1; i < data.SrchResults.length; i++) {
-                        // Retrieve DATA from OneMap Theme API
-                        carparkName.push(data.SrchResults[i].NAME);
-                        latLng.push(data.SrchResults[i].LatLng);
-                        carparkDescription.push(data.SrchResults[i].DESCRIPTION);
-                        carParkType.push(data.SrchResults[i].CAR_PARK_TYPE);
-                        shortTermParking.push(data.SrchResults[i].SHORT_TERM_PARKING);
-                        nightParking.push(data.SrchResults[i].NIGHT_PARKING);
-                        freeParking.push(data.SrchResults[i].FREE_PARKING);
-                        parkingSystemType.push(data.SrchResults[i].TYPE_OF_PARKING_SYSTEM);
-                        // iconURL = data.SrchResults[i].ICON_NAME; //returns 404
-                    }
-                    // Testing Data Retrieval
-                    /*
-                    console.log(latLng);
-                    console.log(iconURL);
-                    console.log(carParkType);
-                    console.log(shortTermParking);
-                    console.log(nightParking);
-                    console.log(freeParking);
-                    console.log(parkingSystemType);
-                    */
+        //Combining API Data to new ObjectArray
+        //Object Creation for Data Retrieved from APIs
 
-                    //Map Marker Creation for each data
-                    for (let i = 0; i < latLng.length; i++) {
-                        geoParts.push(latLng[i].split(","));
-                        // console.log(geoParts);
-                    }
-
-                })
-
-            fetch(dataSgURL)
-                .then(res => res.json())
-                .then(data => {
-                    for (let i = 0; i < data.items[0].carpark_data.length; i++) {
-                        carParkNumber.push(data.items[0].carpark_data[i].carpark_number);
-                        totalLots.push(data.items[0].carpark_data[i].carpark_info[0].total_lots);
-                        availableLots.push(data.items[0].carpark_data[i].carpark_info[0].lots_available);
-                    }
-                    // console.log(carParkNumber);
-                    // console.log(totalLots);
-                    // console.log(availableLots);
-                    // console.log(data);
-                })
-
-            //     {
-            //     let carParkNumber = [];
-            //     carParkNumbers = res.items[0].carpark_data[0].carpark_number;
-            //     console.log(res);
-            //     console.log(carParkNumbers);
-            // })
-
-        }
-        parkingThemeDetails();
+        // function apiData(name) {
+        //     let o = new Object();
+        //     let firstIndex = carparkName.indexOf(name);
+        //     let secondIndex = carParkNumber.indexOf(name);
+        //     //From oneMapAPI
+        //     o.name = name;
+        //     o.description = carparkDescription[firstIndex];
+        //     o.lat = geoParts[firstIndex].lat;
+        //     o.lng = geoParts[firstIndex].lng;
+        //     o.type = carParkType[firstIndex];
+        //     o.shortTerm = shortTermParking[firstIndex];
+        //     o.night = nightParking[firstIndex];
+        //     o.free = freeParking[firstIndex];
+        //     o.system = parkingSystemType[firstIndex];
+        //     //From DataSG API
+        //     o.tlots = totalLots[secondIndex];
+        //     o.alots = availableLots[secondIndex];
+        //     return o
+        // };
 
     });
 
 
+
+    // console.log(carparkName);
+    // for (let i = 0; i < carparkName.length; i++) {
+    //     console.log(x);
+    // };
+
+
     function setMarkerInfo(circleMarker) {
         for (let i = 0; i < geoParts.length; i++) {
-            themeMarker = new L.Marker([parseFloat(geoParts[i][0]), parseFloat(geoParts[i][1])], { icon: parkingMapIcons });
+            themeMarker = new L.Marker([geoParts[i].lat, geoParts[i].lng], { icon: parkingMapIcons });
             themeMarker.on('click', function() {
                 //console.log("marker clicked"); //testing on click function on markers
                 let popup = L.popup()
-                    .setLatLng([parseFloat(geoParts[i][0]), parseFloat(geoParts[i][1])])
+                    .setLatLng([geoParts[i].lat, geoParts[i].lng])
                     .setContent(`<div id="markerPopup">
                                         <ul>
                                             <li><b>${carparkDescription[i]} - ${carparkName[i]}</b></li>
@@ -212,12 +248,11 @@ $(document).ready(function() {
                                             <li><b>Available Parking Left:</b> <h5>***  ${availableLots[i]}  ***</h5></li>
                                         </div>`)
                     .openOn(map);
+            });
 
-            })
             if (circleMarker.contains(themeMarker.getLatLng()) == true) {
                 themeMarker.addTo(markersLayer);
             }
-
         }
         markersLayer.addTo(map);
     }
