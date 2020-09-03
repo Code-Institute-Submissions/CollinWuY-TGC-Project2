@@ -27,8 +27,8 @@ $(document).ready(function() {
 
     let date = new Date();
     let dateYr = date.getFullYear();
-    let dateMt = "0" + (date.getMonth() + 1);
-    let dateDay = date.getDate();
+    let dateMt = ('0' + (date.getMonth() + 1)).slice(-2);
+    let dateDay = ('0' + date.getDate()).slice(-2);
     let dateHr = date.getHours();
     let dateMin = date.getMinutes();
     let dateTime = `${dateYr}-${dateMt}-${dateDay}T${dateHr}:${dateMin}:00`;
@@ -40,7 +40,7 @@ $(document).ready(function() {
     // console.log(dateDay);
     // console.log(dateHr);
     // console.log(dateMin);
-    // console.log(dateTime);
+    console.log(dateTime);
 
     //Custom Leaflet JS Circle Boundary function call
     L.Circle.include({
@@ -102,14 +102,19 @@ $(document).ready(function() {
         "data": form
     }
 
-    $.ajax(settings).done(function(response) {
-        responseJson = JSON.parse(response); //convert to JSON format
-        apiToken = responseJson.access_token; // Assigning variable to api key
-        //console.log(response); // returned as string
-        //console.log(responseJson); //checking JSON format
-        //console.log(apiToken); //checking api key
 
-        // async function parkingThemeDetails() {
+    function apiTokenCall() {
+        return [$.ajax(settings).done(function(response) {
+            responseJson = JSON.parse(response); //convert to JSON format
+            apiToken = responseJson.access_token; // Assigning variable to api key
+            //console.log(response); // returned as string
+            //console.log(responseJson); //checking JSON format
+            //console.log(apiToken); //checking api key
+        })]
+    }
+
+    $.when.apply($, apiTokenCall()).then(function() {
+
         let onMapThemeParams = new URLSearchParams({
             queryName: 'hdb_car_park_information',
             token: apiToken
@@ -134,24 +139,39 @@ $(document).ready(function() {
         availableLots = [];
 
         // ES6 Fetch API for oneMapThemeURL
-        fetch(oneMapThemeURL)
-            .then(themeResp => themeResp.json())
-            .then(data => {
-                for (let i = 1; i < data.SrchResults.length; i++) {
-                    // Retrieve DATA from OneMap Theme API
-                    carparkName.push(data.SrchResults[i].NAME);
-                    latLng.push(data.SrchResults[i].LatLng);
-                    carparkDescription.push(data.SrchResults[i].DESCRIPTION);
-                    carParkType.push(data.SrchResults[i].CAR_PARK_TYPE);
-                    shortTermParking.push(data.SrchResults[i].SHORT_TERM_PARKING);
-                    nightParking.push(data.SrchResults[i].NIGHT_PARKING);
-                    freeParking.push(data.SrchResults[i].FREE_PARKING);
-                    parkingSystemType.push(data.SrchResults[i].TYPE_OF_PARKING_SYSTEM);
-                    // iconURL = data.SrchResults[i].ICON_NAME; //returns 404
+        async function oneMapAPIData() {
+            return await fetch(oneMapThemeURL)
+                .then(themeResp => themeResp.json());
+        }
+
+        // ES6 Fetch API for dataSgURL
+        async function dataSGData() {
+            return await fetch(dataSgURL)
+                .then(dataSGRes => dataSGRes.json());
+        }
+
+        // Return all Promise checker before moving on
+        function getApiData() {
+            return Promise.all([oneMapAPIData(), dataSGData()])
+        }
+
+        // Once Promise Checker is Done, then extract Data
+        getApiData()
+            .then(([themeResp, dataSGRes]) => {
+                // API 1: Sorting Data from oneMapTheme API into Arrays
+                for (let i = 1; i < themeResp.SrchResults.length; i++) {
+                    carparkName.push(themeResp.SrchResults[i].NAME);
+                    latLng.push(themeResp.SrchResults[i].LatLng);
+                    carparkDescription.push(themeResp.SrchResults[i].DESCRIPTION);
+                    carParkType.push(themeResp.SrchResults[i].CAR_PARK_TYPE);
+                    shortTermParking.push(themeResp.SrchResults[i].SHORT_TERM_PARKING);
+                    nightParking.push(themeResp.SrchResults[i].NIGHT_PARKING);
+                    freeParking.push(themeResp.SrchResults[i].FREE_PARKING);
+                    parkingSystemType.push(themeResp.SrchResults[i].TYPE_OF_PARKING_SYSTEM);
+                    // iconURL = themeResp.SrchResults[i].ICON_NAME; //returns 404
                 }
 
-                // Testing Data Retrieval
-
+                // Testing data from oneMapTheme API are in arrays if Async/Await worked
                 // console.log(latLng);
                 // console.log(iconURL);
                 // console.log(carParkType);
@@ -160,93 +180,86 @@ $(document).ready(function() {
                 // console.log(freeParking);
                 // console.log(parkingSystemType);
 
-                //Map Marker Creation for each data
-                for (let i = 0; i < latLng.length; i++) {
-
-                    let geo = (latLng[i].split(","));
-                    geoParts.push({ "lat": geo[0], "lng": geo[1] })
+                // API 2: Sorting Data from DataSG API into Arrays
+                for (let i = 0; i < dataSGRes.items[0].carpark_data.length; i++) {
+                    carParkNumber.push(dataSGRes.items[0].carpark_data[i].carpark_number);
+                    totalLots.push(dataSGRes.items[0].carpark_data[i].carpark_info[0].total_lots);
+                    availableLots.push(dataSGRes.items[0].carpark_data[i].carpark_info[0].lots_available);
                 }
-                // console.log(geoParts);
-                // console.log(geoParts[0].lat);
-                // console.log(geoParts[0].lng);
-            });
 
-        fetch(dataSgURL)
-            .then(res => res.json())
-            .then(data => {
-                for (let i = 0; i < data.items[0].carpark_data.length; i++) {
-                    carParkNumber.push(data.items[0].carpark_data[i].carpark_number);
-                    totalLots.push(data.items[0].carpark_data[i].carpark_info[0].total_lots);
-                    availableLots.push(data.items[0].carpark_data[i].carpark_info[0].lots_available);
-                }
-                // console.log(carParkNumber);
+                // Testing data from DataSG API are in array if Async/Await worked
+                // console.log(carparkName); 
                 // console.log(totalLots);
                 // console.log(availableLots);
                 // console.log(data);
-            });
 
-        // console.log(carparkName);
+                // Combining API Data to new ObjectArray
+                // Object Creation for Data Retrieved from APIs
+                function apiData(name) {
+                    let o = new Object();
+                    let firstIndex = carparkName.indexOf(name);
+                    let secondIndex = carParkNumber.indexOf(name);
+                    //From oneMapAPI
+                    o.name = name;
+                    o.description = carparkDescription[firstIndex];
+                    o.latlng = latLng[firstIndex];
+                    o.type = carParkType[firstIndex];
+                    o.shortTerm = shortTermParking[firstIndex];
+                    o.night = nightParking[firstIndex];
+                    o.free = freeParking[firstIndex];
+                    o.system = parkingSystemType[firstIndex];
+                    //From DataSG API
+                    o.tlots = totalLots[secondIndex];
+                    o.alots = availableLots[secondIndex];
+                    return o
+                };
 
-        for (let i = 0; i < carparkName.length; i++) {
-            console.log(x);
-        };
+                for (name of carparkName) {
+                    // console.log(name); //checking if loop works
+                    compoundData.push(apiData(name));
+                }
 
-        // carparkName.forEach(function(x) {
-        //     console.log(x);
-        // });
-        // }
+                //Spliting Latlng data into Lat and Lng
+                for (let i = 0; i < compoundData.length; i++) {
 
-        //Combining API Data to new ObjectArray
-        //Object Creation for Data Retrieved from APIs
+                    let geo = (compoundData[i].latlng.split(","));
+                    geoParts.push({ "lat": geo[0], "lng": geo[1] })
+                }
 
-        // function apiData(name) {
-        //     let o = new Object();
-        //     let firstIndex = carparkName.indexOf(name);
-        //     let secondIndex = carParkNumber.indexOf(name);
-        //     //From oneMapAPI
-        //     o.name = name;
-        //     o.description = carparkDescription[firstIndex];
-        //     o.lat = geoParts[firstIndex].lat;
-        //     o.lng = geoParts[firstIndex].lng;
-        //     o.type = carParkType[firstIndex];
-        //     o.shortTerm = shortTermParking[firstIndex];
-        //     o.night = nightParking[firstIndex];
-        //     o.free = freeParking[firstIndex];
-        //     o.system = parkingSystemType[firstIndex];
-        //     //From DataSG API
-        //     o.tlots = totalLots[secondIndex];
-        //     o.alots = availableLots[secondIndex];
-        //     return o
-        // };
+                // Testing Data Split
+                // console.log(geoParts);
+                // console.log(geoParts[0].lat);
+                // console.log(geoParts[0].lng);
 
-    });
+            })
+    })
 
+    // console.log(compoundData); //Testing for Compound Data from two API into 1 Array(object)
+    // console.log(compoundData[0].alots);
 
-
-    // console.log(carparkName);
-    // for (let i = 0; i < carparkName.length; i++) {
-    //     console.log(x);
-    // };
-
-
+    // Put carpark Icon Markers whose Lat Lng is within Circle Marker bounds Argument with pop up of details
     function setMarkerInfo(circleMarker) {
-        for (let i = 0; i < geoParts.length; i++) {
+        for (let i = 0; i < compoundData.length; i++) {
             themeMarker = new L.Marker([geoParts[i].lat, geoParts[i].lng], { icon: parkingMapIcons });
             themeMarker.on('click', function() {
                 //console.log("marker clicked"); //testing on click function on markers
-                let popup = L.popup()
+                let popup = L.popup({ maxWidth: "auto" })
                     .setLatLng([geoParts[i].lat, geoParts[i].lng])
-                    .setContent(`<div id="markerPopup">
+                    .setContent(`   <div id="markerPopup">
                                         <ul>
-                                            <li><b>${carparkDescription[i]} - ${carparkName[i]}</b></li>
-                                            <li><b>Type:</b> ${carParkType[i]}</li>
-                                            <li><b>Parking Limit:</b> ${shortTermParking[i]}</li>
-                                            <li><b>Night Parking:</b> ${nightParking[i]}</li>
-                                            <li><b>Free Parking:</b> ${freeParking[i]}</li>
-                                            <li><b>Cashcard:</b> ${parkingSystemType[i]}</li>
-                                            <li><b>Total Lots:</b> ${totalLots[i]}</li>
-                                            <li><b>Available Parking Left:</b> <h5>***  ${availableLots[i]}  ***</h5></li>
-                                        </div>`)
+                                            <li id="list-name"><b>${compoundData[i].description} - ${compoundData[i].name}</b></li>
+                                            <li id="list-info"><b>Type:</b>           ${compoundData[i].type}</li>
+                                            <li id="list-info"><b>Parking Limit:</b>  ${compoundData[i].shortTerm}</li>
+                                            <li id="list-info"><b>Night Parking:</b>  ${compoundData[i].night}</li>
+                                            <li id="list-info"><b>Free Parking:</b>   ${compoundData[i].free}</li>
+                                            <li id="list-info"><b>Cashcard:</b>       ${compoundData[i].system}</li>
+                                            <li id="list-info"><b>Total Lots:</b>     ${compoundData[i].tlots}</li>
+                                            <li id="list-avail"><b>Available Parking Left:</b><br/> <h5>***  ${compoundData[i].alots}  ***</h5></li>
+                                            </ul>
+                                    </div>`)
+                    // Insert to list to Test for Lat Lng Accuracy to Location
+                    //<li><b>LatLng:</b> ${compoundData[i].latlng}</li>
+                    //<li><b>Lat + Lng:</b> ${geoParts[i].lat} , ${geoParts[i].lng}</li>
                     .openOn(map);
             });
 
