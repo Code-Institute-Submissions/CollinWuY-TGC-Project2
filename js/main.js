@@ -110,6 +110,14 @@ $(document).ready(function() {
             //console.log(response); // returned as string
             //console.log(responseJson); //checking JSON format
             //console.log(apiToken); //checking api key
+            setTimeout(
+                function() {
+                    if (!localStorage["reloaded"]) {
+                        localStorage["reloaded"] = true
+                        location.reload()
+                    }
+                }, 5000
+            )
         })]
     }
 
@@ -427,14 +435,7 @@ $(document).ready(function() {
         }
 
 
-        setTimeout(
-            function() {
-                if (!localStorage["reloaded"]) {
-                    localStorage["reloaded"] = true
-                    location.reload()
-                }
-            }, 5000
-        )
+
 
 
     })
