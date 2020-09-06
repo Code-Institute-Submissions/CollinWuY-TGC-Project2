@@ -78,11 +78,12 @@ $(document).ready(function() {
 
         basemap.addTo(map);
         map.invalidateSize();
+        $('#mapPage').hide();
     }
 
     //Map creation function call then hiding map to give 1 page look
     createMap();
-    $('#mapPage').hide();
+
 
 
     //Api Key Generation for oneMapAPI
