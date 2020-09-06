@@ -15,7 +15,7 @@ $(document).ready(function() {
     let availableLots = [];
     let latLng = [];
     let geoParts = [];
-    let carparkIcon = "../TGC-Project2/assets/images/car.png"; //Using local as oneMap API .png returned as 404
+    let carparkIcon = ".../TGC-Project2/assets/images/car.png"; //Using local as oneMap API .png returned as 404
     let parkingMapIcons;
     let carparkDescription = [];
     let carParkType = [];
@@ -230,6 +230,16 @@ $(document).ready(function() {
                 // console.log(geoParts);
                 // console.log(geoParts[0].lat);
                 // console.log(geoParts[0].lng);
+
+                setTimeout(
+                    function() {
+                        if (!localStorage["reloaded"]) {
+                            localStorage["reloaded"] = true
+                            location.reload()
+                        }
+                    }, 3000
+                )
+
 
             })
     })
