@@ -261,6 +261,28 @@ $(document).ready(function() {
                     //<li><b>LatLng:</b> ${compoundData[i].latlng}</li>
                     //<li><b>Lat + Lng:</b> ${geoParts[i].lat} , ${geoParts[i].lng}</li>
                     .openOn(map);
+
+
+                // UX/UI Color change to indicate medium/low amount of parking lots left
+                let alot = compoundData[i].alots;
+                let tlot = compoundData[i].tlots;
+                // console.log(alot);
+                // console.log(tlot);
+
+                if (((tlot - alot) / tlot) > 0.9) {
+                    $('#list-avail').css({ background: 'red' });
+                } else if (((tlot - alot) / tlot) > 0.7) {
+                    $('#list-avail').css({ background: 'orangered' });
+                } else if (((tlot - alot) / tlot) > 0.5) {
+                    $('#list-avail').css({ background: 'orange' });
+                }
+
+                //Changing undefined returned value to N/A
+                if (alot == undefined) {
+                    $("#list-avail").html("<b>Available Parking Left:</b><br> <h5>***  N/A  ***</h5>");
+                }
+
+
             });
 
             if (circleMarker.contains(themeMarker.getLatLng()) == true) {
