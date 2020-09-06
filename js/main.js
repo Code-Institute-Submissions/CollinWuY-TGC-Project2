@@ -237,7 +237,7 @@ $(document).ready(function() {
                             localStorage["reloaded"] = true
                             location.reload()
                         }
-                    }, 3000
+                    }, 5000
                 )
 
 
