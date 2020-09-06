@@ -360,7 +360,7 @@ $(document).ready(function() {
                         .setLatLng([mapLat, mapLong])
                         .setContent(`You are here!<br/><b>* ${userText} *<b>`)
                         .openOn(map);
-                    map.setView([mapLat, mapLong], 17);
+                    map.setView([mapLat, mapLong], 16);
                     let circleMarker = new L.circle([mapLat, mapLong], 500).addTo(markersLayer);
                     markersLayer.addTo(map);
                     map.fitBounds(circleMarker.getBounds());
@@ -393,7 +393,7 @@ $(document).ready(function() {
                         .setLatLng([mapLat, mapLong])
                         .setContent(`You are here!<br/><b>* ${userText} *<b>`)
                         .openOn(map);
-                    map.setView([mapLat, mapLong], 17);
+                    map.setView([mapLat, mapLong], 16);
                     let circleMarker = new L.circle([mapLat, mapLong], 500).addTo(markersLayer);
                     markersLayer.addTo(map);
                     map.fitBounds(circleMarker.getBounds());
@@ -418,7 +418,7 @@ $(document).ready(function() {
                     .setLatLng([autoLat, autoLng])
                     .setContent(`You are here!<br/><b>* GPS Locations *<b>`)
                     .openOn(map);
-                map.setView([autoLat, autoLng], 17);
+                map.setView([autoLat, autoLng], 16);
                 let circleMarker = new L.circle([autoLat, autoLng], 500).addTo(markersLayer);
                 markersLayer.addTo(map);
                 map.fitBounds(circleMarker.getBounds());
