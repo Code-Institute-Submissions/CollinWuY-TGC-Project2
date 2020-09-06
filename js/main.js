@@ -15,7 +15,7 @@ $(document).ready(function() {
     let availableLots = [];
     let latLng = [];
     let geoParts = [];
-    let carparkIcon = "../TGC-Project2/assets/images/car.png"; //Using local as oneMap API .png returned as 404
+    let carparkIcon = '/assets/images/car.png'; //Using local as oneMap API .png returned as 404
     let parkingMapIcons;
     let carparkDescription = [];
     let carParkType = [];
@@ -230,32 +230,20 @@ $(document).ready(function() {
                 // console.log(geoParts);
                 // console.log(geoParts[0].lat);
                 // console.log(geoParts[0].lng);
-
-                setTimeout(
-                    function() {
-                        if (!localStorage["reloaded"]) {
-                            localStorage["reloaded"] = true
-                            location.reload()
-                        }
-                    }, 5000
-                )
-
-
             })
-    })
 
-    // console.log(compoundData); //Testing for Compound Data from two API into 1 Array(object)
-    // console.log(compoundData[0].alots);
+        // console.log(compoundData); //Testing for Compound Data from two API into 1 Array(object)
+        // console.log(compoundData[0].alots);
 
-    // Put carpark Icon Markers whose Lat Lng is within Circle Marker bounds Argument with pop up of details
-    function setMarkerInfo(circleMarker) {
-        for (let i = 0; i < compoundData.length; i++) {
-            themeMarker = new L.Marker([geoParts[i].lat, geoParts[i].lng], { icon: parkingMapIcons });
-            themeMarker.on('click', function() {
-                //console.log("marker clicked"); //testing on click function on markers
-                let popup = L.popup({ maxWidth: "auto" })
-                    .setLatLng([geoParts[i].lat, geoParts[i].lng])
-                    .setContent(`   <div id="markerPopup">
+        // Put carpark Icon Markers whose Lat Lng is within Circle Marker bounds Argument with pop up of details
+        function setMarkerInfo(circleMarker) {
+            for (let i = 0; i < compoundData.length; i++) {
+                themeMarker = new L.Marker([geoParts[i].lat, geoParts[i].lng], { icon: parkingMapIcons });
+                themeMarker.on('click', function() {
+                    //console.log("marker clicked"); //testing on click function on markers
+                    let popup = L.popup({ maxWidth: "auto" })
+                        .setLatLng([geoParts[i].lat, geoParts[i].lng])
+                        .setContent(`   <div id="markerPopup">
                                         <ul>
                                             <li id="list-name"><b>${compoundData[i].description} - ${compoundData[i].name}</b></li>
                                             <li id="list-info"><b>Type:</b>           ${compoundData[i].type}</li>
@@ -267,181 +255,189 @@ $(document).ready(function() {
                                             <li id="list-avail"><b>Available Parking Left:</b><br/> <h5>***  ${compoundData[i].alots}  ***</h5></li>
                                             </ul>
                                     </div>`)
-                    // Insert to list to Test for Lat Lng Accuracy to Location
-                    //<li><b>LatLng:</b> ${compoundData[i].latlng}</li>
-                    //<li><b>Lat + Lng:</b> ${geoParts[i].lat} , ${geoParts[i].lng}</li>
-                    .openOn(map);
+                        // Insert to list to Test for Lat Lng Accuracy to Location
+                        //<li><b>LatLng:</b> ${compoundData[i].latlng}</li>
+                        //<li><b>Lat + Lng:</b> ${geoParts[i].lat} , ${geoParts[i].lng}</li>
+                        .openOn(map);
 
 
-                // UX/UI Color change to indicate medium/low amount of parking lots left
-                let alot = compoundData[i].alots;
-                let tlot = compoundData[i].tlots;
-                // console.log(alot);
-                // console.log(tlot);
+                    // UX/UI Color change to indicate medium/low amount of parking lots left
+                    let alot = compoundData[i].alots;
+                    let tlot = compoundData[i].tlots;
+                    // console.log(alot);
+                    // console.log(tlot);
 
-                if (((tlot - alot) / tlot) > 0.9) {
-                    $('#list-avail').css({ background: 'red' });
-                } else if (((tlot - alot) / tlot) > 0.7) {
-                    $('#list-avail').css({ background: 'orangered' });
-                } else if (((tlot - alot) / tlot) > 0.5) {
-                    $('#list-avail').css({ background: 'orange' });
+                    if (((tlot - alot) / tlot) > 0.9) {
+                        $('#list-avail').css({ background: 'red' });
+                    } else if (((tlot - alot) / tlot) > 0.7) {
+                        $('#list-avail').css({ background: 'orangered' });
+                    } else if (((tlot - alot) / tlot) > 0.5) {
+                        $('#list-avail').css({ background: 'orange' });
+                    }
+
+                    //Changing undefined returned value to N/A
+                    if (alot == undefined) {
+                        $("#list-avail").html("<b>Available Parking Left:</b><br> <h5>***  N/A  ***</h5>");
+                    }
+
+
+                });
+
+                if (circleMarker.contains(themeMarker.getLatLng()) == true) {
+                    themeMarker.addTo(markersLayer);
                 }
-
-                //Changing undefined returned value to N/A
-                if (alot == undefined) {
-                    $("#list-avail").html("<b>Available Parking Left:</b><br> <h5>***  N/A  ***</h5>");
-                }
-
-
-            });
-
-            if (circleMarker.contains(themeMarker.getLatLng()) == true) {
-                themeMarker.addTo(markersLayer);
             }
-        }
-        markersLayer.addTo(map);
-    }
-
-
-
-
-    const openClose = function() {
-        let action = 1;
-        $('#hmSecTextSub').on('click', function() {
-            let textSelector = document.querySelector('#userTextInputDiv');
-            if (action == 1) {
-                textSelector.classList.remove('hidden');
-                $('#hmSecTextSub').css('color', 'red');
-                action = 2;
-                console.log(action);
-            } else {
-                textSelector.classList.add('hidden');
-                $('#hmSecTextSub').css('color', 'blue');
-                action = 1;
-                console.log(action);
-            }
-        })
-    }
-
-
-    $('#mapInfoIcon').on('click', function() {
-        homepage.classList.remove('hidden');
-        $('#mapPage').hide();
-    })
-
-    $('#userInputBtn').on('click', fetchUserInputAuto);
-    $('#userTextInput1').keydown(function(e) {
-        let keyPressed = event.keyCode || event.which;
-        if (keyPressed === 13) {
-            fetchUserInput1();
-            $('#userTextInput1').val("");
-        }
-    });
-    $('#userTextInput2').keydown(function(e) {
-        let keyPressed = event.keyCode || event.which;
-        if (keyPressed === 13) {
-            fetchUserInput2();
-            $('#userTextInput2').val("");
-        }
-    });
-    openClose();
-
-
-    function fetchUserInput1() {
-        userText = $('#userTextInput1').val();
-        console.log(userText);
-        $('#mapPage').show();
-        homepage.classList.add('hidden');
-        markersLayer.clearLayers();
-
-        let onMapParams = new URLSearchParams({
-            searchVal: userText,
-            returnGeom: 'Y',
-            getAddrDetails: 'Y'
-        })
-        let oneMapURL = `https://developers.onemap.sg/commonapi/search?${onMapParams.toString()}`;
-
-        fetch(oneMapURL)
-            .then(response => response.json())
-            .then(data => {
-                mapLat = data.results[0].LATITUDE;
-                mapLong = data.results[0].LONGTITUDE;
-                marker = new L.Marker([mapLat, mapLong], { bounceOnAdd: false }).addTo(markersLayer);
-                let popup = L.popup()
-                    .setLatLng([mapLat, mapLong])
-                    .setContent(`You are here!<br/><b>* ${userText} *<b>`)
-                    .openOn(map);
-                map.setView([mapLat, mapLong], 17);
-                let circleMarker = new L.circle([mapLat, mapLong], 500).addTo(markersLayer);
-                markersLayer.addTo(map);
-                map.fitBounds(circleMarker.getBounds());
-                setMarkerInfo(circleMarker);
-                //console.log(latLng);
-                console.log(mapLat, mapLong);
-            }).catch(error => console.log(error));
-
-    }
-
-    function fetchUserInput2() {
-        userText = $('#userTextInput2').val();
-        console.log(userText);
-        markersLayer.clearLayers();
-
-        let onMapParams = new URLSearchParams({
-            searchVal: userText,
-            returnGeom: 'Y',
-            getAddrDetails: 'Y'
-        })
-        let oneMapURL = `https://developers.onemap.sg/commonapi/search?${onMapParams.toString()}`;
-
-        fetch(oneMapURL)
-            .then(response => response.json())
-            .then(data => {
-                mapLat = data.results[0].LATITUDE;
-                mapLong = data.results[0].LONGTITUDE;
-                marker = new L.Marker([mapLat, mapLong], { bounceOnAdd: false }).addTo(markersLayer);
-                let popup = L.popup()
-                    .setLatLng([mapLat, mapLong])
-                    .setContent(`You are here!<br/><b>* ${userText} *<b>`)
-                    .openOn(map);
-                map.setView([mapLat, mapLong], 17);
-                let circleMarker = new L.circle([mapLat, mapLong], 500).addTo(markersLayer);
-                markersLayer.addTo(map);
-                map.fitBounds(circleMarker.getBounds());
-                setMarkerInfo(circleMarker);
-                //console.log(latLng);
-                console.log(mapLat, mapLong);
-            }).catch(error => console.log(error));
-    }
-
-
-    function fetchUserInputAuto() {
-        navigator.geolocation.getCurrentPosition(showPosition);
-        $('#mapPage').show();
-        homepage.classList.add('hidden');
-        markersLayer.clearLayers();
-
-        function showPosition(position) {
-            autoLat = position.coords.latitude;
-            autoLng = position.coords.longitude;
-            marker = new L.Marker([autoLat, autoLng], { bounceOnAdd: false }).addTo(markersLayer);
-            var popup = L.popup()
-                .setLatLng([autoLat, autoLng])
-                .setContent(`You are here!<br/><b>* GPS Locations *<b>`)
-                .openOn(map);
-            map.setView([autoLat, autoLng], 17);
-            let circleMarker = new L.circle([autoLat, autoLng], 500).addTo(markersLayer);
             markersLayer.addTo(map);
-            map.fitBounds(circleMarker.getBounds());
-            setMarkerInfo(circleMarker);
-            console.log(autoLat, autoLng);
         }
-    }
 
 
 
 
+        const openClose = function() {
+            let action = 1;
+            $('#hmSecTextSub').on('click', function() {
+                let textSelector = document.querySelector('#userTextInputDiv');
+                if (action == 1) {
+                    textSelector.classList.remove('hidden');
+                    $('#hmSecTextSub').css('color', 'red');
+                    action = 2;
+                    console.log(action);
+                } else {
+                    textSelector.classList.add('hidden');
+                    $('#hmSecTextSub').css('color', 'blue');
+                    action = 1;
+                    console.log(action);
+                }
+            })
+        }
 
+
+        $('#mapInfoIcon').on('click', function() {
+            homepage.classList.remove('hidden');
+            $('#mapPage').hide();
+        })
+
+        $('#userInputBtn').on('click', fetchUserInputAuto);
+        $('#userTextInput1').keydown(function(e) {
+            let keyPressed = event.keyCode || event.which;
+            if (keyPressed === 13) {
+                fetchUserInput1();
+                $('#userTextInput1').val("");
+            }
+        });
+        $('#userTextInput2').keydown(function(e) {
+            let keyPressed = event.keyCode || event.which;
+            if (keyPressed === 13) {
+                fetchUserInput2();
+                $('#userTextInput2').val("");
+            }
+        });
+        openClose();
+
+
+        function fetchUserInput1() {
+            userText = $('#userTextInput1').val();
+            console.log(userText);
+            $('#mapPage').show();
+            homepage.classList.add('hidden');
+            markersLayer.clearLayers();
+
+            let onMapParams = new URLSearchParams({
+                searchVal: userText,
+                returnGeom: 'Y',
+                getAddrDetails: 'Y'
+            })
+            let oneMapURL = `https://developers.onemap.sg/commonapi/search?${onMapParams.toString()}`;
+
+            fetch(oneMapURL)
+                .then(response => response.json())
+                .then(data => {
+                    mapLat = data.results[0].LATITUDE;
+                    mapLong = data.results[0].LONGTITUDE;
+                    marker = new L.Marker([mapLat, mapLong], { bounceOnAdd: false }).addTo(markersLayer);
+                    let popup = L.popup()
+                        .setLatLng([mapLat, mapLong])
+                        .setContent(`You are here!<br/><b>* ${userText} *<b>`)
+                        .openOn(map);
+                    map.setView([mapLat, mapLong], 17);
+                    let circleMarker = new L.circle([mapLat, mapLong], 500).addTo(markersLayer);
+                    markersLayer.addTo(map);
+                    map.fitBounds(circleMarker.getBounds());
+                    setMarkerInfo(circleMarker);
+                    //console.log(latLng);
+                    console.log(mapLat, mapLong);
+                }).catch(error => console.log(error));
+
+        }
+
+        function fetchUserInput2() {
+            userText = $('#userTextInput2').val();
+            console.log(userText);
+            markersLayer.clearLayers();
+
+            let onMapParams = new URLSearchParams({
+                searchVal: userText,
+                returnGeom: 'Y',
+                getAddrDetails: 'Y'
+            })
+            let oneMapURL = `https://developers.onemap.sg/commonapi/search?${onMapParams.toString()}`;
+
+            fetch(oneMapURL)
+                .then(response => response.json())
+                .then(data => {
+                    mapLat = data.results[0].LATITUDE;
+                    mapLong = data.results[0].LONGTITUDE;
+                    marker = new L.Marker([mapLat, mapLong], { bounceOnAdd: false }).addTo(markersLayer);
+                    let popup = L.popup()
+                        .setLatLng([mapLat, mapLong])
+                        .setContent(`You are here!<br/><b>* ${userText} *<b>`)
+                        .openOn(map);
+                    map.setView([mapLat, mapLong], 17);
+                    let circleMarker = new L.circle([mapLat, mapLong], 500).addTo(markersLayer);
+                    markersLayer.addTo(map);
+                    map.fitBounds(circleMarker.getBounds());
+                    setMarkerInfo(circleMarker);
+                    //console.log(latLng);
+                    console.log(mapLat, mapLong);
+                }).catch(error => console.log(error));
+        }
+
+
+        function fetchUserInputAuto() {
+            navigator.geolocation.getCurrentPosition(showPosition);
+            $('#mapPage').show();
+            homepage.classList.add('hidden');
+            markersLayer.clearLayers();
+
+            function showPosition(position) {
+                autoLat = position.coords.latitude;
+                autoLng = position.coords.longitude;
+                marker = new L.Marker([autoLat, autoLng], { bounceOnAdd: false }).addTo(markersLayer);
+                var popup = L.popup()
+                    .setLatLng([autoLat, autoLng])
+                    .setContent(`You are here!<br/><b>* GPS Locations *<b>`)
+                    .openOn(map);
+                map.setView([autoLat, autoLng], 17);
+                let circleMarker = new L.circle([autoLat, autoLng], 500).addTo(markersLayer);
+                markersLayer.addTo(map);
+                map.fitBounds(circleMarker.getBounds());
+                setMarkerInfo(circleMarker);
+                console.log(autoLat, autoLng);
+            }
+        }
+
+
+        setTimeout(
+            function() {
+                if (!localStorage["reloaded"]) {
+                    localStorage["reloaded"] = true
+                    location.reload()
+                }
+            }, 5000
+        )
+
+
+    })
 
 
 
