@@ -111,7 +111,9 @@ $(document).ready(function() {
             //console.log(responseJson); //checking JSON format
             //console.log(apiToken); //checking api key
 
-        })]
+        }, $(document).ajaxError(function() {
+            location.reload();
+        }))]
     }
 
     $.when.apply($, apiTokenCall()).then(function() {
