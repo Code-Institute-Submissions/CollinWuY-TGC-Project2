@@ -33,14 +33,14 @@ $(document).ready(function() {
     let dateMin = date.getMinutes();
     let dateTime = `${dateYr}-${dateMt}-${dateDay}T${dateHr}:${dateMin}:00`;
 
-    // Date Time Testing for Input Params for Carpark Availability API
+    // Date Time Testing for Input Params for Data Gov SG Carpark Availability API
     // console.log(date);
     // console.log(dateYr);
     // console.log(dateMt);
     // console.log(dateDay);
     // console.log(dateHr);
     // console.log(dateMin);
-    console.log(dateTime);
+    //console.log(dateTime); For Checking Date_time Param Data Gov SG API
 
     //Custom Leaflet JS Circle Boundary function call
     L.Circle.include({
@@ -296,8 +296,6 @@ $(document).ready(function() {
         }
 
 
-
-
         const openClose = function() {
             let action = 1;
             $('#hmSecTextSub').on('click', function() {
@@ -342,7 +340,7 @@ $(document).ready(function() {
 
         function fetchUserInput1() {
             userText = $('#userTextInput1').val();
-            console.log(userText);
+            // console.log(userText); // Checking Input Value on Front Page
             $('#mapPage').show();
             homepage.classList.add('hidden');
             markersLayer.clearLayers();
@@ -369,15 +367,15 @@ $(document).ready(function() {
                     markersLayer.addTo(map);
                     map.fitBounds(circleMarker.getBounds());
                     setMarkerInfo(circleMarker);
-                    //console.log(latLng);
-                    console.log(mapLat, mapLong);
-                }).catch(error => console.log(error));
+                    //console.log(latLng); For Point Location Accuracy Checking
+                    //console.log(mapLat, mapLong); For Point Location Accuracy Checking
+                }).catch(error => alert(error));
 
         }
 
         function fetchUserInput2() {
             userText = $('#userTextInput2').val();
-            console.log(userText);
+            // console.log(userText); // Checking Input Value on Map Page
             markersLayer.clearLayers();
 
             let onMapParams = new URLSearchParams({
@@ -402,9 +400,9 @@ $(document).ready(function() {
                     markersLayer.addTo(map);
                     map.fitBounds(circleMarker.getBounds());
                     setMarkerInfo(circleMarker);
-                    //console.log(latLng);
-                    console.log(mapLat, mapLong);
-                }).catch(error => console.log(error));
+                    //console.log(latLng); For Point Location Accuracy Checking
+                    //console.log(mapLat, mapLong); For Point Location Accuracy Checking
+                }).catch(error => alert(error));
         }
 
 
@@ -427,7 +425,7 @@ $(document).ready(function() {
                 markersLayer.addTo(map);
                 map.fitBounds(circleMarker.getBounds());
                 setMarkerInfo(circleMarker);
-                console.log(autoLat, autoLng);
+                //console.log(autoLat, autoLng); For Point Location Accuracy Checking
             }
         }
 
@@ -444,7 +442,7 @@ $(document).ready(function() {
         } else {
             $("#loadingScreen").hide();
         }
-    }, 5000)
+    }, 3000)
 
     // setTimeout(
     //     function () {
