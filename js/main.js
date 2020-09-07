@@ -444,7 +444,7 @@ $(document).ready(function() {
         } else {
             $("#loadingScreen").hide();
         }
-    }, 3000)
+    }, 5000)
 
     // setTimeout(
     //     function () {
