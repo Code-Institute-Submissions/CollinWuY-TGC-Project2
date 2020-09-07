@@ -78,7 +78,6 @@ $(document).ready(function() {
 
         basemap.addTo(map);
         map.invalidateSize();
-        $('#mapPage').hide();
     }
 
     //Map creation function call then hiding map to give 1 page look
@@ -118,6 +117,8 @@ $(document).ready(function() {
     }
 
     $.when.apply($, apiTokenCall()).then(function() {
+
+        $('#mapPage').hide();
 
         let onMapThemeParams = new URLSearchParams({
             queryName: 'hdb_car_park_information',
