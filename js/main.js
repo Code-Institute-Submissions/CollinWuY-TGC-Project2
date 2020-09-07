@@ -362,7 +362,7 @@ $(document).ready(function() {
                     marker = new L.Marker([mapLat, mapLong], { bounceOnAdd: false }).addTo(markersLayer);
                     let popup = L.popup()
                         .setLatLng([mapLat, mapLong])
-                        .setContent(`You are here!<br/><b>* ${userText} *<b>`)
+                        .setContent(`<h6>You are here:</h6><br/><b><h3>* ${userText} *</h3><b>`)
                         .openOn(map);
                     map.setView([mapLat, mapLong], 16);
                     let circleMarker = new L.circle([mapLat, mapLong], 500).addTo(markersLayer);
@@ -395,7 +395,7 @@ $(document).ready(function() {
                     marker = new L.Marker([mapLat, mapLong], { bounceOnAdd: false }).addTo(markersLayer);
                     let popup = L.popup()
                         .setLatLng([mapLat, mapLong])
-                        .setContent(`You are here!<br/><b>* ${userText} *<b>`)
+                        .setContent(`<h6>You are here:</h6><br/><b><h3>* ${userText} *</h3><b>`)
                         .openOn(map);
                     map.setView([mapLat, mapLong], 16);
                     let circleMarker = new L.circle([mapLat, mapLong], 500).addTo(markersLayer);
@@ -420,7 +420,7 @@ $(document).ready(function() {
                 marker = new L.Marker([autoLat, autoLng], { bounceOnAdd: false }).addTo(markersLayer);
                 var popup = L.popup()
                     .setLatLng([autoLat, autoLng])
-                    .setContent(`You are here!<br/><b>* GPS Locations *<b>`)
+                    .setContent(`<h6>You are here:</h6><br/><b><h3>* GPS Location *</h3><b>`)
                     .openOn(map);
                 map.setView([autoLat, autoLng], 16);
                 let circleMarker = new L.circle([autoLat, autoLng], 500).addTo(markersLayer);
