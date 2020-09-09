@@ -155,7 +155,7 @@ body {
 #info-list-wrapper {
     width: auto;
     height: auto;
-    background-color: rgba(1, 1, 1, 0.5);
+    background-color: rgba(1, 1, 1, 0.7);
     margin-top: 10vh;
     margin-left: 6vh;
     display: none;
@@ -173,11 +173,15 @@ body {
 }
 
 .row1 {
-    background-color: blue;
+    background-color: darkblue;
 }
 
 #info-list tbody {
-    background-color: rgba(1, 1, 1, 0.5);
+    background-color: rgba(1, 1, 1, 0.7);
+}
+
+#table-title {
+    color: bisque;
 }
 
 #userTextInputDiv2 {
@@ -209,7 +213,7 @@ body {
     display: flex;
     flex-direction: column;
     align-content: center;
-    background-color: slategray;
+    background-color: dimgray;
     padding: 2vw;
     color: white;
 }
@@ -226,7 +230,7 @@ body {
     padding: 2vw 0px;
     margin-bottom: 10px;
     font-weight: bolder;
-    color: Black;
+    color: bisque;
     font-size: 4vw;
     border-bottom: 6px double black;
     text-align: center;
@@ -241,6 +245,7 @@ body {
     border: 6px ridge black;
     font-size: 3vw;
     line-height: 6vw;
+    color: white;
 }
 
 #list-avail h5 {
