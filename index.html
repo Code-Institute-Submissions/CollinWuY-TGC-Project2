@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <!-- Browser Tab Icon -->
+    <!-- Browser Tab Favicon -->
     <link rel="icon" href="assets/images/car.png">
     <title>Carpark Finder SG</title>
     <!-- Required meta tags -->
@@ -21,7 +21,7 @@
 </head>
 
 <body>
-    <!-- Loading Screen Circles -->
+    <!-- Loading Screen Circles or API calling/Map loading to be complete-->
     <div id="loadingScreen">
         <div id="loading-container">
             <div class="loader-div">
@@ -34,11 +34,9 @@
             </div>
         </div>
     </div>
-    <!-- HomePage - FrontFacing Landing Page -->
+    <!-- HomePage - FrontFacing Landing Page with Search Textbox and GPS Geolocation Options -->
     <div class="row d-flex justify-content-center align-items-center" id="homePage">
         <div class="row d-flex flex-column mb-5 pb-5" id="hmWrapper">
-            <!-- <img src="assets/images/underground-car-parking-garage-with-vacant-places_107791-1635.jpg">
-             -->
             <div class="row mx-auto justify-content-center align-items-center m-4" id="hmIconWrapper">
                 <i class="fas fa-parking bg-white" id="hmIcon"></i>
             </div>
@@ -53,12 +51,30 @@
             </div>
         </div>
     </div>
+
     <!-- MapPage - Display Map and Information -->
     <div class='container-fluid row' id="mapPage">
         <div class="position-relative" id='mapdiv'></div>
         <div class="input-group position-absolute" id="mapInfo">
             <a href="#homepage"><i class="fas fa-parking bg-white row m-2" id="mapInfoIcon"></i></a>
             <div class="align-self-center" id="userTextInputDiv2"><input type="text" id="userTextInput2" placeholder="Type in your Location / Landmark"></div>
+        </div>
+        <!-- MapPage Information Summary Table for Overview of Markers within Circle Boundary -->
+        <div class="container row position-absolute" id="info-list-wrapper">
+            <table class="text-white lead table table-responsive table-hover" id="info-list">
+                <thead>
+                    <tr data-toggle="collapse" id="row1" data-target=".row1">
+                        <th id="table-title">Information Summary - Click to Expand</th>
+                    </tr>
+                    <tr class="collapse row1">
+                        <th>Location</th>
+                        <th>Available Space</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+
+            </table>
         </div>
 
     </div>

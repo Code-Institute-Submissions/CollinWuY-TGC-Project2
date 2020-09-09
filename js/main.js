@@ -83,6 +83,13 @@ $(document).ready(function() {
     //Map creation function call then hiding map to give 1 page look
     createMap();
 
+    // Change the Title of Info Summary Table to Expand or Collapse on Click
+    $("#table-title").on("click", function() {
+        $("#table-title").html("Information Summary - Click to Collapse");
+        if ($(".row1").hasClass("show")) {
+            $("#table-title").html("Information Summary - Click to Expand");
+        }
+    })
 
 
     //Api Key Generation for oneMapAPI
@@ -102,7 +109,7 @@ $(document).ready(function() {
         "data": form
     }
 
-
+    // Creating a new API Token for oneMap
     function apiTokenCall() {
         return [$.ajax(settings).done(function(response) {
             responseJson = JSON.parse(response); //convert to JSON format
@@ -116,6 +123,7 @@ $(document).ready(function() {
         }))]
     }
 
+    // Calling API Data when API Token Call is done
     $.when.apply($, apiTokenCall()).then(function() {
 
         $('#mapPage').hide();
@@ -249,7 +257,7 @@ $(document).ready(function() {
                     let popup = L.popup({ maxWidth: "auto" })
                         .setLatLng([geoParts[i].lat, geoParts[i].lng])
                         .setContent(`   <div id="markerPopup">
-                                        <ul>
+                                        <ul id="pop-list">
                                             <li id="list-name"><b>${compoundData[i].description} - ${compoundData[i].name}</b></li>
                                             <li id="list-info"><b>Type:</b>           ${compoundData[i].type}</li>
                                             <li id="list-info"><b>Parking Limit:</b>  ${compoundData[i].shortTerm}</li>
@@ -257,7 +265,7 @@ $(document).ready(function() {
                                             <li id="list-info"><b>Free Parking:</b>   ${compoundData[i].free}</li>
                                             <li id="list-info"><b>Cashcard:</b>       ${compoundData[i].system}</li>
                                             <li id="list-info"><b>Total Lots:</b>     ${compoundData[i].tlots}</li>
-                                            <li id="list-avail"><b>Available Parking Left:</b><br/> <h5>***  ${compoundData[i].alots}  ***</h5></li>
+                                            <li id="list-avail"><b>Available Parking Left:</b><br/><br/><h5>${compoundData[i].alots}</h5><br/>Take your time... Ample space available</li>
                                             </ul>
                                     </div>`)
                         // Insert to list to Test for Lat Lng Accuracy to Location
@@ -271,55 +279,47 @@ $(document).ready(function() {
                     let tlot = compoundData[i].tlots;
                     // console.log(alot);
                     // console.log(tlot);
-
                     if (((tlot - alot) / tlot) > 0.9) {
                         $('#list-avail').css({ background: 'red' });
+                        $("#list-avail").html(`<b>Available Parking Left:</b><br/><br/><h5>${compoundData[i].alots}</h5><br/>Hurry! Running out of Space!!!`);
                     } else if (((tlot - alot) / tlot) > 0.7) {
                         $('#list-avail').css({ background: 'orangered' });
+                        $("#list-avail").html(`<b>Available Parking Left:</b><br/><br/><h5>${compoundData[i].alots}</h5><br/>Quickly! Spacing running out fast!`);
                     } else if (((tlot - alot) / tlot) > 0.5) {
                         $('#list-avail').css({ background: 'orange' });
-                    }
+                        $("#list-avail").html(`<b>Available Parking Left:</b><br/><br/><h5>${compoundData[i].alots}</h5><br/>Not going to hurry you...`);
+                    };
 
                     //Changing undefined returned value to N/A
                     if (alot == undefined) {
-                        $("#list-avail").html("<b>Available Parking Left:</b><br> <h5>***  N/A  ***</h5>");
-                    }
+                        $("#list-avail").html("<b>Available Parking Left:</b><br/><br/><h5>N/A</h5><br/>Coupon Parking or Cannot access information");
+                    };
 
 
                 });
 
+                // Display Markers Only when LatLng of Data is within circleMarker LatLng Bounds
                 if (circleMarker.contains(themeMarker.getLatLng()) == true) {
                     themeMarker.addTo(markersLayer);
-                }
-            }
+                    // Display All Marker Summary to Info Summary Table *only on 768px width View and above; change undefined to NA
+                    let alot = compoundData[i].alots;
+                    if (alot == undefined) {
+                        $("#info-list tbody").append(`<tr class="collapse row1"><td><b>${compoundData[i].description}</b></td><td>N/A</td></tr>`);
+                    } else {
+                        $("#info-list tbody").append(`<tr class="collapse row1"><td><b>${compoundData[i].description}</b></td><td>${compoundData[i].alots}</td></tr>`);
+                    };
+                };
+            };
             markersLayer.addTo(map);
-        }
+        };
 
-
-        const openClose = function() {
-            let action = 1;
-            $('#hmSecTextSub').on('click', function() {
-                let textSelector = document.querySelector('#userTextInputDiv');
-                if (action == 1) {
-                    textSelector.classList.remove('hidden');
-                    $('#hmSecTextSub').css('color', 'red');
-                    action = 2;
-                    console.log(action);
-                } else {
-                    textSelector.classList.add('hidden');
-                    $('#hmSecTextSub').css('color', 'blue');
-                    action = 1;
-                    console.log(action);
-                }
-            })
-        }
-
-
+        // Return to Main Page when clicking Iconon Map Page
         $('#mapInfoIcon').on('click', function() {
             homepage.classList.remove('hidden');
             $('#mapPage').hide();
         })
 
+        // Button Tracking and Key press tracking for Search
         $('#userInputBtn').on('click', fetchUserInputAuto);
         $('#userTextInput1').keydown(function(e) {
             let keyPressed = event.keyCode || event.which;
@@ -335,15 +335,22 @@ $(document).ready(function() {
                 $('#userTextInput2').val("");
             }
         });
-        openClose();
 
-
+        // Main Page Text-box Search Call
         function fetchUserInput1() {
             userText = $('#userTextInput1').val();
             // console.log(userText); // Checking Input Value on Front Page
             $('#mapPage').show();
             homepage.classList.add('hidden');
+            //Reset Markers on Map to new Circle Boundary
             markersLayer.clearLayers();
+            //Reset Information Summary on Map
+            if ($(".row1").hasClass("show")) {
+                $(".row1").removeClass("show")
+                $("#info-list tbody").empty();
+            } else {
+                $("#info-list tbody").empty();
+            }
 
             let onMapParams = new URLSearchParams({
                 searchVal: userText,
@@ -360,7 +367,7 @@ $(document).ready(function() {
                     marker = new L.Marker([mapLat, mapLong], { bounceOnAdd: false }).addTo(markersLayer);
                     let popup = L.popup()
                         .setLatLng([mapLat, mapLong])
-                        .setContent(`<h6>You are here:</h6><br/><b><h3>* ${userText} *</h3><b>`)
+                        .setContent(`<h6>You are here:</h6><br/><b><h3> ${userText} </h3><b>`)
                         .openOn(map);
                     map.setView([mapLat, mapLong], 16);
                     let circleMarker = new L.circle([mapLat, mapLong], 500).addTo(markersLayer);
@@ -373,10 +380,19 @@ $(document).ready(function() {
 
         }
 
+        // Map Page Text-box Search Call
         function fetchUserInput2() {
             userText = $('#userTextInput2').val();
             // console.log(userText); // Checking Input Value on Map Page
+            //Reset Markers on Map to new Circle Boundary
             markersLayer.clearLayers();
+            //Reset Information Summary on Map
+            if ($(".row1").hasClass("show")) {
+                $(".row1").removeClass("show")
+                $("#info-list tbody").empty();
+            } else {
+                $("#info-list tbody").empty();
+            }
 
             let onMapParams = new URLSearchParams({
                 searchVal: userText,
@@ -393,7 +409,7 @@ $(document).ready(function() {
                     marker = new L.Marker([mapLat, mapLong], { bounceOnAdd: false }).addTo(markersLayer);
                     let popup = L.popup()
                         .setLatLng([mapLat, mapLong])
-                        .setContent(`<h6>You are here:</h6><br/><b><h3>* ${userText} *</h3><b>`)
+                        .setContent(`<h6>You are here:</h6><br/><b><h3> ${userText} </h3><b>`)
                         .openOn(map);
                     map.setView([mapLat, mapLong], 16);
                     let circleMarker = new L.circle([mapLat, mapLong], 500).addTo(markersLayer);
@@ -403,14 +419,23 @@ $(document).ready(function() {
                     //console.log(latLng); For Point Location Accuracy Checking
                     //console.log(mapLat, mapLong); For Point Location Accuracy Checking
                 }).catch(error => alert(error));
+
         }
 
-
+        // Main Page Using Geolocation(GPS) Search Call
         function fetchUserInputAuto() {
             navigator.geolocation.getCurrentPosition(showPosition);
             $('#mapPage').show();
             homepage.classList.add('hidden');
+            //Reset Markers on Map to new Circle Boundary
             markersLayer.clearLayers();
+            //Reset Information Summary on Map
+            if ($(".row1").hasClass("show")) {
+                $(".row1").removeClass("show")
+                $("#info-list tbody").empty();
+            } else {
+                $("#info-list tbody").empty();
+            }
 
             function showPosition(position) {
                 autoLat = position.coords.latitude;
@@ -418,7 +443,7 @@ $(document).ready(function() {
                 marker = new L.Marker([autoLat, autoLng], { bounceOnAdd: false }).addTo(markersLayer);
                 var popup = L.popup()
                     .setLatLng([autoLat, autoLng])
-                    .setContent(`<h6>You are here:</h6><br/><b><h3>* GPS Location *</h3><b>`)
+                    .setContent(`<h6>You are here:</h6><br/><b><h3> GPS Location </h3><b>`)
                     .openOn(map);
                 map.setView([autoLat, autoLng], 16);
                 let circleMarker = new L.circle([autoLat, autoLng], 500).addTo(markersLayer);
@@ -435,6 +460,7 @@ $(document).ready(function() {
 
     })
 
+    //Loading Screen Timer and Reset to enesure API is properly called
     setTimeout(function() {
         if (!localStorage["reloaded"]) {
             localStorage["reloaded"] = true
@@ -442,20 +468,6 @@ $(document).ready(function() {
         } else {
             $("#loadingScreen").hide();
         }
-    }, 3000)
-
-    // setTimeout(
-    //     function () {
-    //         if (!localStorage["reloaded"]) {
-    //             localStorage["reloaded"] = true
-    //             location.reload()
-    //         }
-    //     }, 5000
-    // )
-
-
-
-
-
+    }, 5000)
 
 })
