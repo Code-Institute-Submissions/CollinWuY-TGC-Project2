@@ -295,6 +295,14 @@ $(document).ready(function() {
                         $("#list-avail").html("<b>Available Parking Left:</b><br/><br/><h5>N/A</h5><br/>Coupon Parking or Cannot access information");
                     };
 
+                    // if ((popup.isOpen()) == true) {
+                    //     console.log(popup.isOpen());
+                    //     map.closePopup();
+                    // } else {
+                    //     console.log(popup.isOpen());
+                    //     map.openPopup();
+                    // }
+
 
                 });
 
