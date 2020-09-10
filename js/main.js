@@ -83,15 +83,6 @@ $(document).ready(function() {
     //Map creation function call then hiding map to give 1 page look
     createMap();
 
-    // Change the Title of Info Summary Table to Expand or Collapse on Click
-    $("#table-title").on("click", function() {
-        $("#table-title").html("Information Summary - Click to Collapse");
-        if ($(".row1").hasClass("show")) {
-            $("#table-title").html("Information Summary - Click to Expand");
-        }
-    })
-
-
     //Api Key Generation for oneMapAPI
     var form = new FormData();
     form.append("email", "xlazurelx@gmail.com");
@@ -125,12 +116,9 @@ $(document).ready(function() {
 
     // Calling API Data when API Token Call is done
     $.when.apply($, apiTokenCall()).then(function() {
-
-        $('#mapPage').hide();
-
         let onMapThemeParams = new URLSearchParams({
-            queryName: 'hdb_car_park_information',
-            token: apiToken
+            queryName: "hdb_car_park_information",
+            token: apiToken,
         });
 
         let oneMapThemeURL = `https://developers.onemap.sg/privateapi/themesvc/retrieveTheme?${onMapThemeParams.toString()}`;
@@ -153,97 +141,102 @@ $(document).ready(function() {
 
         // ES6 Fetch API for oneMapThemeURL
         async function oneMapAPIData() {
-            return await fetch(oneMapThemeURL)
-                .then(themeResp => themeResp.json());
+            return await fetch(oneMapThemeURL).then((themeResp) =>
+                themeResp.json()
+            );
         }
 
         // ES6 Fetch API for dataSgURL
         async function dataSGData() {
-            return await fetch(dataSgURL)
-                .then(dataSGRes => dataSGRes.json());
+            return await fetch(dataSgURL).then((dataSGRes) => dataSGRes.json());
         }
 
         // Return all Promise checker before moving on
         function getApiData() {
-            return Promise.all([oneMapAPIData(), dataSGData()])
+            return Promise.all([oneMapAPIData(), dataSGData()]);
         }
 
         // Once Promise Checker is Done, then extract Data
-        getApiData()
-            .then(([themeResp, dataSGRes]) => {
-                // API 1: Sorting Data from oneMapTheme API into Arrays
-                for (let i = 1; i < themeResp.SrchResults.length; i++) {
-                    carparkName.push(themeResp.SrchResults[i].NAME);
-                    latLng.push(themeResp.SrchResults[i].LatLng);
-                    carparkDescription.push(themeResp.SrchResults[i].DESCRIPTION);
-                    carParkType.push(themeResp.SrchResults[i].CAR_PARK_TYPE);
-                    shortTermParking.push(themeResp.SrchResults[i].SHORT_TERM_PARKING);
-                    nightParking.push(themeResp.SrchResults[i].NIGHT_PARKING);
-                    freeParking.push(themeResp.SrchResults[i].FREE_PARKING);
-                    parkingSystemType.push(themeResp.SrchResults[i].TYPE_OF_PARKING_SYSTEM);
-                    // iconURL = themeResp.SrchResults[i].ICON_NAME; //returns 404
-                }
+        getApiData().then(([themeResp, dataSGRes]) => {
+            // API 1: Sorting Data from oneMapTheme API into Arrays
+            for (let i = 1; i < themeResp.SrchResults.length; i++) {
+                carparkName.push(themeResp.SrchResults[i].NAME);
+                latLng.push(themeResp.SrchResults[i].LatLng);
+                carparkDescription.push(themeResp.SrchResults[i].DESCRIPTION);
+                carParkType.push(themeResp.SrchResults[i].CAR_PARK_TYPE);
+                shortTermParking.push(themeResp.SrchResults[i].SHORT_TERM_PARKING);
+                nightParking.push(themeResp.SrchResults[i].NIGHT_PARKING);
+                freeParking.push(themeResp.SrchResults[i].FREE_PARKING);
+                parkingSystemType.push(
+                    themeResp.SrchResults[i].TYPE_OF_PARKING_SYSTEM
+                );
+                // iconURL = themeResp.SrchResults[i].ICON_NAME; //returns 404
+            }
 
-                // Testing data from oneMapTheme API are in arrays if Async/Await worked
-                // console.log(latLng);
-                // console.log(iconURL);
-                // console.log(carParkType);
-                // console.log(shortTermParking);
-                // console.log(nightParking);
-                // console.log(freeParking);
-                // console.log(parkingSystemType);
+            // Testing data from oneMapTheme API are in arrays if Async/Await worked
+            // console.log(latLng);
+            // console.log(iconURL);
+            // console.log(carParkType);
+            // console.log(shortTermParking);
+            // console.log(nightParking);
+            // console.log(freeParking);
+            // console.log(parkingSystemType);
 
-                // API 2: Sorting Data from DataSG API into Arrays
-                for (let i = 0; i < dataSGRes.items[0].carpark_data.length; i++) {
-                    carParkNumber.push(dataSGRes.items[0].carpark_data[i].carpark_number);
-                    totalLots.push(dataSGRes.items[0].carpark_data[i].carpark_info[0].total_lots);
-                    availableLots.push(dataSGRes.items[0].carpark_data[i].carpark_info[0].lots_available);
-                }
+            // API 2: Sorting Data from DataSG API into Arrays
+            for (let i = 0; i < dataSGRes.items[0].carpark_data.length; i++) {
+                carParkNumber.push(dataSGRes.items[0].carpark_data[i].carpark_number);
+                totalLots.push(
+                    dataSGRes.items[0].carpark_data[i].carpark_info[0].total_lots
+                );
+                availableLots.push(
+                    dataSGRes.items[0].carpark_data[i].carpark_info[0].lots_available
+                );
+            }
 
-                // Testing data from DataSG API are in array if Async/Await worked
-                // console.log(carparkName); 
-                // console.log(totalLots);
-                // console.log(availableLots);
-                // console.log(data);
+            // Testing data from DataSG API are in array if Async/Await worked
+            // console.log(carparkName);
+            // console.log(totalLots);
+            // console.log(availableLots);
+            // console.log(data);
 
-                // Combining API Data to new ObjectArray
-                // Object Creation for Data Retrieved from APIs
-                function apiData(name) {
-                    let o = new Object();
-                    let firstIndex = carparkName.indexOf(name);
-                    let secondIndex = carParkNumber.indexOf(name);
-                    //From oneMapAPI
-                    o.name = name;
-                    o.description = carparkDescription[firstIndex];
-                    o.latlng = latLng[firstIndex];
-                    o.type = carParkType[firstIndex];
-                    o.shortTerm = shortTermParking[firstIndex];
-                    o.night = nightParking[firstIndex];
-                    o.free = freeParking[firstIndex];
-                    o.system = parkingSystemType[firstIndex];
-                    //From DataSG API
-                    o.tlots = totalLots[secondIndex];
-                    o.alots = availableLots[secondIndex];
-                    return o
-                };
+            // Combining API Data to new ObjectArray
+            // Object Creation for Data Retrieved from APIs
+            function apiData(name) {
+                let o = new Object();
+                let firstIndex = carparkName.indexOf(name);
+                let secondIndex = carParkNumber.indexOf(name);
+                //From oneMapAPI
+                o.name = name;
+                o.description = carparkDescription[firstIndex];
+                o.latlng = latLng[firstIndex];
+                o.type = carParkType[firstIndex];
+                o.shortTerm = shortTermParking[firstIndex];
+                o.night = nightParking[firstIndex];
+                o.free = freeParking[firstIndex];
+                o.system = parkingSystemType[firstIndex];
+                //From DataSG API
+                o.tlots = totalLots[secondIndex];
+                o.alots = availableLots[secondIndex];
+                return o;
+            }
 
-                for (name of carparkName) {
-                    // console.log(name); //checking if loop works
-                    compoundData.push(apiData(name));
-                }
+            for (name of carparkName) {
+                // console.log(name); //checking if loop works
+                compoundData.push(apiData(name));
+            }
 
-                //Spliting Latlng data into Lat and Lng
-                for (let i = 0; i < compoundData.length; i++) {
+            //Spliting Latlng data into Lat and Lng
+            for (let i = 0; i < compoundData.length; i++) {
+                let geo = compoundData[i].latlng.split(",");
+                geoParts.push({ lat: geo[0], lng: geo[1] });
+            }
 
-                    let geo = (compoundData[i].latlng.split(","));
-                    geoParts.push({ "lat": geo[0], "lng": geo[1] })
-                }
-
-                // Testing Data Split
-                // console.log(geoParts);
-                // console.log(geoParts[0].lat);
-                // console.log(geoParts[0].lng);
-            })
+            // Testing Data Split
+            // console.log(geoParts);
+            // console.log(geoParts[0].lat);
+            // console.log(geoParts[0].lng);
+            $("#mapPage").hide();
+        });
 
         // console.log(compoundData); //Testing for Compound Data from two API into 1 Array(object)
         // console.log(compoundData[0].alots);
@@ -251,12 +244,15 @@ $(document).ready(function() {
         // Put carpark Icon Markers whose Lat Lng is within Circle Marker bounds Argument with pop up of details
         function setMarkerInfo(circleMarker) {
             for (let i = 0; i < compoundData.length; i++) {
-                themeMarker = new L.Marker([geoParts[i].lat, geoParts[i].lng], { icon: parkingMapIcons });
-                themeMarker.on('click', function() {
+                themeMarker = new L.Marker([geoParts[i].lat, geoParts[i].lng], {
+                    icon: parkingMapIcons,
+                });
+                themeMarker.on("click", function() {
                     //console.log("marker clicked"); //testing on click function on markers
                     let popup = L.popup({ maxWidth: "auto" })
                         .setLatLng([geoParts[i].lat, geoParts[i].lng])
-                        .setContent(`   <div id="markerPopup">
+                        .setContent(
+                            `   <div id="markerPopup">
                                         <ul id="pop-list">
                                             <li id="list-name"><b>${compoundData[i].description} - ${compoundData[i].name}</b></li>
                                             <li id="list-info"><b>Type:</b>           ${compoundData[i].type}</li>
@@ -267,33 +263,41 @@ $(document).ready(function() {
                                             <li id="list-info"><b>Total Lots:</b>     ${compoundData[i].tlots}</li>
                                             <li id="list-avail"><b>Available Parking Left:</b><br/><br/><h5>${compoundData[i].alots}</h5><br/>Take your time... Ample space available</li>
                                             </ul>
-                                    </div>`)
+                                    </div>`
+                        )
                         // Insert to list to Test for Lat Lng Accuracy to Location
                         //<li><b>LatLng:</b> ${compoundData[i].latlng}</li>
                         //<li><b>Lat + Lng:</b> ${geoParts[i].lat} , ${geoParts[i].lng}</li>
                         .openOn(map);
-
 
                     // UX/UI Color change to indicate medium/low amount of parking lots left
                     let alot = compoundData[i].alots;
                     let tlot = compoundData[i].tlots;
                     // console.log(alot);
                     // console.log(tlot);
-                    if (((tlot - alot) / tlot) > 0.9) {
-                        $('#list-avail').css({ background: 'red' });
-                        $("#list-avail").html(`<b>Available Parking Left:</b><br/><br/><h5>${compoundData[i].alots}</h5><br/>Hurry! Running out of Space!!!`);
-                    } else if (((tlot - alot) / tlot) > 0.7) {
-                        $('#list-avail').css({ background: 'orangered' });
-                        $("#list-avail").html(`<b>Available Parking Left:</b><br/><br/><h5>${compoundData[i].alots}</h5><br/>Quickly! Spacing running out fast!`);
-                    } else if (((tlot - alot) / tlot) > 0.5) {
-                        $('#list-avail').css({ background: 'orange' });
-                        $("#list-avail").html(`<b>Available Parking Left:</b><br/><br/><h5>${compoundData[i].alots}</h5><br/>Not going to hurry you...`);
-                    };
+                    if ((tlot - alot) / tlot > 0.9) {
+                        $("#list-avail").css({ background: "red" });
+                        $("#list-avail").html(
+                            `<b>Available Parking Left:</b><br/><br/><h5>${compoundData[i].alots}</h5><br/>Hurry! Running out of Space!!!`
+                        );
+                    } else if ((tlot - alot) / tlot > 0.7) {
+                        $("#list-avail").css({ background: "orangered" });
+                        $("#list-avail").html(
+                            `<b>Available Parking Left:</b><br/><br/><h5>${compoundData[i].alots}</h5><br/>Quickly! Spacing running out fast!`
+                        );
+                    } else if ((tlot - alot) / tlot > 0.5) {
+                        $("#list-avail").css({ background: "orange" });
+                        $("#list-avail").html(
+                            `<b>Available Parking Left:</b><br/><br/><h5>${compoundData[i].alots}</h5><br/>Not going to hurry you...`
+                        );
+                    }
 
                     //Changing undefined returned value to N/A
                     if (alot == undefined) {
-                        $("#list-avail").html("<b>Available Parking Left:</b><br/><br/><h5>N/A</h5><br/>Coupon Parking or Cannot access information");
-                    };
+                        $("#list-avail").html(
+                            "<b>Available Parking Left:</b><br/><br/><h5>N/A</h5><br/>Coupon Parking or Cannot access information"
+                        );
+                    }
 
                     // if ((popup.isOpen()) == true) {
                     //     console.log(popup.isOpen());
@@ -302,8 +306,6 @@ $(document).ready(function() {
                     //     console.log(popup.isOpen());
                     //     map.openPopup();
                     // }
-
-
                 });
 
                 // Display Markers Only when LatLng of Data is within circleMarker LatLng Bounds
@@ -312,49 +314,61 @@ $(document).ready(function() {
                     // Display All Marker Summary to Info Summary Table *only on 768px width View and above; change undefined to NA
                     let alot = compoundData[i].alots;
                     if (alot == undefined) {
-                        $("#info-list tbody").append(`<tr class="collapse row1"><td><b>${compoundData[i].description}</b></td><td>N/A</td></tr>`);
+                        $("#info-list tbody").append(
+                            `<tr class="collapse row1"><td><b>${compoundData[i].description}</b></td><td>N/A</td></tr>`
+                        );
                     } else {
-                        $("#info-list tbody").append(`<tr class="collapse row1"><td><b>${compoundData[i].description}</b></td><td>${compoundData[i].alots}</td></tr>`);
-                    };
-                };
-            };
+                        $("#info-list tbody").append(
+                            `<tr class="collapse row1"><td><b>${compoundData[i].description}</b></td><td>${compoundData[i].alots}</td></tr>`
+                        );
+                    }
+                }
+            }
             markersLayer.addTo(map);
-        };
+        }
+
+        // Change the Title of Info Summary Table to Expand or Collapse on Click
+        $("#table-title").on("click", function() {
+            $("#table-title").html("Information Summary - Click to Collapse");
+            if ($(".row1").hasClass("show")) {
+                $("#table-title").html("Information Summary - Click to Expand");
+            }
+        });
 
         // Return to Main Page when clicking Iconon Map Page
-        $('#mapInfoIcon').on('click', function() {
-            homepage.classList.remove('hidden');
-            $('#mapPage').hide();
-        })
+        $("#mapInfoIcon").on("click", function() {
+            homepage.classList.remove("hidden");
+            $("#mapPage").hide();
+        });
 
         // Button Tracking and Key press tracking for Search
-        $('#userInputBtn').on('click', fetchUserInputAuto);
-        $('#userTextInput1').keydown(function(e) {
+        $("#userInputBtn").on("click", fetchUserInputAuto);
+        $("#userTextInput1").keydown(function(e) {
             let keyPressed = event.keyCode || event.which;
             if (keyPressed === 13) {
                 fetchUserInput1();
-                $('#userTextInput1').val("");
+                $("#userTextInput1").val("");
             }
         });
-        $('#userTextInput2').keydown(function(e) {
+        $("#userTextInput2").keydown(function(e) {
             let keyPressed = event.keyCode || event.which;
             if (keyPressed === 13) {
                 fetchUserInput2();
-                $('#userTextInput2').val("");
+                $("#userTextInput2").val("");
             }
         });
 
         // Main Page Text-box Search Call
         function fetchUserInput1() {
-            userText = $('#userTextInput1').val();
+            userText = $("#userTextInput1").val();
             // console.log(userText); // Checking Input Value on Front Page
-            $('#mapPage').show();
-            homepage.classList.add('hidden');
+            $("#mapPage").show();
+            homepage.classList.add("hidden");
             //Reset Markers on Map to new Circle Boundary
             markersLayer.clearLayers();
             //Reset Information Summary on Map
             if ($(".row1").hasClass("show")) {
-                $(".row1").removeClass("show")
+                $(".row1").removeClass("show");
                 $("#info-list tbody").empty();
             } else {
                 $("#info-list tbody").empty();
@@ -362,41 +376,47 @@ $(document).ready(function() {
 
             let onMapParams = new URLSearchParams({
                 searchVal: userText,
-                returnGeom: 'Y',
-                getAddrDetails: 'Y'
-            })
+                returnGeom: "Y",
+                getAddrDetails: "Y",
+            });
             let oneMapURL = `https://developers.onemap.sg/commonapi/search?${onMapParams.toString()}`;
 
             fetch(oneMapURL)
-                .then(response => response.json())
-                .then(data => {
+                .then((response) => response.json())
+                .then((data) => {
                     mapLat = data.results[0].LATITUDE;
                     mapLong = data.results[0].LONGTITUDE;
-                    marker = new L.Marker([mapLat, mapLong], { bounceOnAdd: false }).addTo(markersLayer);
+                    marker = new L.Marker([mapLat, mapLong], {
+                        bounceOnAdd: false,
+                    }).addTo(markersLayer);
                     let popup = L.popup()
                         .setLatLng([mapLat, mapLong])
-                        .setContent(`<h6>You are here:</h6><br/><b><h3> ${userText} </h3><b>`)
+                        .setContent(
+                            `<h6>You are here:</h6><br/><b><h3> ${userText} </h3><b>`
+                        )
                         .openOn(map);
                     map.setView([mapLat, mapLong], 16);
-                    let circleMarker = new L.circle([mapLat, mapLong], 500).addTo(markersLayer);
+                    let circleMarker = new L.circle([mapLat, mapLong], 500).addTo(
+                        markersLayer
+                    );
                     markersLayer.addTo(map);
                     map.fitBounds(circleMarker.getBounds());
                     setMarkerInfo(circleMarker);
                     //console.log(latLng); For Point Location Accuracy Checking
                     //console.log(mapLat, mapLong); For Point Location Accuracy Checking
-                }).catch(error => alert(error));
-
+                })
+                .catch((error) => alert(error));
         }
 
         // Map Page Text-box Search Call
         function fetchUserInput2() {
-            userText = $('#userTextInput2').val();
+            userText = $("#userTextInput2").val();
             // console.log(userText); // Checking Input Value on Map Page
             //Reset Markers on Map to new Circle Boundary
             markersLayer.clearLayers();
             //Reset Information Summary on Map
             if ($(".row1").hasClass("show")) {
-                $(".row1").removeClass("show")
+                $(".row1").removeClass("show");
                 $("#info-list tbody").empty();
             } else {
                 $("#info-list tbody").empty();
@@ -404,42 +424,48 @@ $(document).ready(function() {
 
             let onMapParams = new URLSearchParams({
                 searchVal: userText,
-                returnGeom: 'Y',
-                getAddrDetails: 'Y'
-            })
+                returnGeom: "Y",
+                getAddrDetails: "Y",
+            });
             let oneMapURL = `https://developers.onemap.sg/commonapi/search?${onMapParams.toString()}`;
 
             fetch(oneMapURL)
-                .then(response => response.json())
-                .then(data => {
+                .then((response) => response.json())
+                .then((data) => {
                     mapLat = data.results[0].LATITUDE;
                     mapLong = data.results[0].LONGTITUDE;
-                    marker = new L.Marker([mapLat, mapLong], { bounceOnAdd: false }).addTo(markersLayer);
+                    marker = new L.Marker([mapLat, mapLong], {
+                        bounceOnAdd: false,
+                    }).addTo(markersLayer);
                     let popup = L.popup()
                         .setLatLng([mapLat, mapLong])
-                        .setContent(`<h6>You are here:</h6><br/><b><h3> ${userText} </h3><b>`)
+                        .setContent(
+                            `<h6>You are here:</h6><br/><b><h3> ${userText} </h3><b>`
+                        )
                         .openOn(map);
                     map.setView([mapLat, mapLong], 16);
-                    let circleMarker = new L.circle([mapLat, mapLong], 500).addTo(markersLayer);
+                    let circleMarker = new L.circle([mapLat, mapLong], 500).addTo(
+                        markersLayer
+                    );
                     markersLayer.addTo(map);
                     map.fitBounds(circleMarker.getBounds());
                     setMarkerInfo(circleMarker);
                     //console.log(latLng); For Point Location Accuracy Checking
                     //console.log(mapLat, mapLong); For Point Location Accuracy Checking
-                }).catch(error => alert(error));
-
+                })
+                .catch((error) => alert(error));
         }
 
         // Main Page Using Geolocation(GPS) Search Call
         function fetchUserInputAuto() {
             navigator.geolocation.getCurrentPosition(showPosition);
-            $('#mapPage').show();
-            homepage.classList.add('hidden');
+            $("#mapPage").show();
+            homepage.classList.add("hidden");
             //Reset Markers on Map to new Circle Boundary
             markersLayer.clearLayers();
             //Reset Information Summary on Map
             if ($(".row1").hasClass("show")) {
-                $(".row1").removeClass("show")
+                $(".row1").removeClass("show");
                 $("#info-list tbody").empty();
             } else {
                 $("#info-list tbody").empty();
@@ -448,34 +474,40 @@ $(document).ready(function() {
             function showPosition(position) {
                 autoLat = position.coords.latitude;
                 autoLng = position.coords.longitude;
-                marker = new L.Marker([autoLat, autoLng], { bounceOnAdd: false }).addTo(markersLayer);
+                marker = new L.Marker([autoLat, autoLng], {
+                    bounceOnAdd: false,
+                }).addTo(markersLayer);
                 var popup = L.popup()
                     .setLatLng([autoLat, autoLng])
-                    .setContent(`<h6>You are here:</h6><br/><b><h3> GPS Location </h3><b>`)
+                    .setContent(
+                        `<h6>You are here:</h6><br/><b><h3> GPS Location </h3><b>`
+                    )
                     .openOn(map);
                 map.setView([autoLat, autoLng], 16);
-                let circleMarker = new L.circle([autoLat, autoLng], 500).addTo(markersLayer);
+                let circleMarker = new L.circle([autoLat, autoLng], 500).addTo(
+                    markersLayer
+                );
                 markersLayer.addTo(map);
                 map.fitBounds(circleMarker.getBounds());
                 setMarkerInfo(circleMarker);
                 //console.log(autoLat, autoLng); For Point Location Accuracy Checking
             }
         }
-
-
-
-
-
     })
 
     //Loading Screen Timer and Reset to enesure API is properly called
     setTimeout(function() {
-        if (!localStorage["reloaded"]) {
-            localStorage["reloaded"] = true
-            location.reload()
-        } else {
-            $("#loadingScreen").hide();
+        if (window.localStorage) {
+            if (!localStorage.getItem("reloaded")) {
+                localStorage["reloaded"] = true;
+                location.reload();
+            } else {
+                $("#loadingScreen").hide();
+                localStorage.removeItem("reloaded");
+            }
         }
-    }, 5000)
+    }, 3000)
+
+
 
 })
