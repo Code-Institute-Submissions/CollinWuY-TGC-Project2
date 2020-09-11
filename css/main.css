@@ -169,7 +169,6 @@ body {
 
 #info-list th {
     font-family: Georgia, 'Times New Roman', Times, serif;
-    font-size: 2vh;
 }
 
 .row1 {
@@ -182,6 +181,16 @@ body {
 
 #table-title {
     color: bisque;
+    font-size: 2.5vh;
+}
+
+#table-oc {
+    color: bisque;
+    letter-spacing: 2px;
+    font-style: oblique;
+    font-size: 1.5vh;
+    margin: 0;
+    padding: 0 0 1.5vh;
 }
 
 #userTextInputDiv2 {

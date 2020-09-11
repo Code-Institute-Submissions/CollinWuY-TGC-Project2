@@ -249,6 +249,7 @@ $(document).ready(function() {
                 });
                 themeMarker.on("click", function() {
                     //console.log("marker clicked"); //testing on click function on markers
+                    map.closePopup();
                     let popup = L.popup({ maxWidth: "auto" })
                         .setLatLng([geoParts[i].lat, geoParts[i].lng])
                         .setContent(
@@ -330,10 +331,10 @@ $(document).ready(function() {
         }
 
         // Change the Title of Info Summary Table to Expand or Collapse on Click
-        $("#table-title").on("click", function() {
-            $("#table-title").html("Information Summary - Click to Collapse");
+        $("#table-oc").on("click", function() {
+            $("#table-oc").html("[Click to Collapse]");
             if ($(".row1").hasClass("show")) {
-                $("#table-title").html("Information Summary - Click to Expand");
+                $("#table-oc").html("[Click to Expand]");
             }
         });
 
