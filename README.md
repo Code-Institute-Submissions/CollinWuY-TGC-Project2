@@ -1,4 +1,4 @@
-# Where to Park? #
+# Carpark Finder SG - Where to Park? #
 
 ### TGC - Interactive Development Milestone Project 2 ###
 By: **Collin Wu Yuewei** -- *Code Institute Batch 8* -- 
