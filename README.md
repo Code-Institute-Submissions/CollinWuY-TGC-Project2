@@ -3,7 +3,9 @@
 ### TGC - Interactive Development Milestone Project 2 ###
 By: **Collin Wu Yuewei** -- *Code Institute Batch 8* -- 
 
-An interactive website meant to help local Singaporean's to find alternative carparking in HDB areas when their destination is full-up. Singapore is a tightly dense metropolitan city, where many drive to highly dense congregation locations like malls, hotels, cinemas, offices... etc. Many of times, these places face full carpark queue lines, and people may even wait up to an hour before finding carpark at such location. Luckily in Singapore, there are many residential Housing Developement Board (HDB) carparks close-by these areas that area easily accessible and cheaper, though it requries a short-walk to the location. This website aims to helps you find these carparks and inform you the available slots left within a 500m zone.
+An interactive website meant to help local Singaporean's to find alternative carparking in HDB areas when their destination is full-up. Singapore is a tightly dense metropolitan city, where many drive to highly dense congregation locations like malls, hotels, cinemas, offices... etc. 
+
+Many of times, these places face full carpark queue lines, and people may even wait up to an hour before finding carpark at such location. Luckily in Singapore, there are many residential Housing Developement Board (HDB) carparks close-by these areas that area easily accessible, automated with gantries and slots tracking, though it requries a short-walk to the location. This website aims to helps you find these carparks and inform you the available slots left within a 500m zone.
 
 ![Website Preview Image](/assets/images/WhereToPark.png "Where to Park Website Homepage")
 ![Website Preview Image](/assets/images/WhereToPark2.png "Where to Park Website Search Page")
@@ -18,86 +20,93 @@ The concept chosen for this project is to find a solution to a daily common prob
 
 The full website demo can be previewed here: [Where to Park?](https://collinwuy.github.io/TGC-Project2/)
 
-Responsive demo can be previewed here: [Responsive Demo on Various Devices](http://ami.responsivedesign.is/?url=https://collinwuy.github.io/TGC-Project-1/)
+Responsive is tested using Google Inspector:<br> 
+![Responsive Demo on Various Devices](/assets/images/responsiveness.png "Website Responsiveness Preview")
 <br>
-<br>
-![Website Responsiveness Preview](/assets/images/ReponsiveView.png "Website Responsiveness Preview")
 
 ## UX ##
 
-The target audience for this website are for people whom are of the working class and older that are in search of pain-relief or mobility-aid as well as atheletes looking to improve their flexibility and performance.
+The target audience for this website are for people who are drivers that are on the move. Whom are going to packed locations such as malls, events...etc or are stuck in carpark queues.  
 
-This project was a mobile first and a single hand operation design in mind. It has to fill the screen and have sufficiently large fonts for pleasant viewing.
+The website concept is mainly to be a clean and simple interface, where the only actions are either text-box, icons or buttons. Removing the "barrier to learn", allowing any new user to pick-up and use immediately.
 
-The navigation bar is a large sidebar that expands from the left with a collapse button to the bottom left, so that it is easily access via the thumb of the user.
+This project was a mobile first and a single hand operation design in mind. It has to fill the screen and have sufficiently large fonts for pleasant viewing and accessiblity. A big striking blue Call-To-Action button right in the middle of the screen that accesses the GPS capability of modern day high-tech phones. Allowing pin-point accuracy to the current location.
 
-All buttons are purposefully place nearer to the lower left bottom of each page for easy thumb access. Large call to action buttons have color change feedback on press; to quickly gain access to pop-ups with information or relocation to another page down the website.
+Obvious blue car icons are dotted on the map as locations of carparks in the zone and have pop-ups to give essential information to the user. The available carpark is the largest of the information and is color coded depending of the current availability parking slots in relations to the total slots available at the carpark.
 
-On larger devices, more fanciful hover animations and color-change is implemented for better user feedback. Most button are now centered for symmmetry. 
+By hiding pages and only display the relevant page at 100% viewport, no scrolling is required to gain full access to information.
 
-The theme of the website is darker, earthy colors with contrasting bright orange and yellow to provide a inviting and theraputic association. 
--- _More Info_ [Color Psychology](https://www.verywellmind.com/color-psychology-2795824) --
+A secondary text-box search is located below the Call-To-Action button on the homepage and top-left beside the return to homepage icon on the map page to allow destination planning, re-locating the center of scanning or when GPS locator is unavailable.
 
-The 100% viewport pages design is meant to focus the user's attention on a full screen page and not be distracted by half/cut-off pages; in which can either be scrolled through or brought to with the navbar.
+On larger devices, more fanciful click-to-expand location summary table is available to view all locations in the zone and their available carpark slots at a go.
+<br>
+![Information Summary Table](assets/images/summarytable.png "Information Summary Table")
 
 ## Features ##
 - Full 100% Viewport per page to focus the user's attention
   <br>
 - Single Website, All Pages Design for minimal loading of links or other pages 
   <br>
-- 100% Offline Website, All Fonts, Icons, Images, Video, JS/CSS Libraries are all downloaded
+- 3-5sec Loading Page for allowing all API data retrievial to be completed preventing interruptions on usage
   <br>
-- Custom CSS for scrollbars
+- Loading page will store a reload value into localstorage, that then stops the refreshing webpage of setTimout on the second load 
   <br>
-- Left Side Navbar
-  - Icons with Words on Hover for Quick Access
-  - Collapsing to a Small Button on the Bottom Left on Mobile Devices
-  - Large Left Menu Navbar on Expand for easy thumb access
+- Quick Access Call-to-Action button that use GPS/Geolocation to determine location
+  <br>
+- Color-coded information for better UX
+  <br>
+- Loading Page (_Page0_)
+  - Animated circle movements to indicate loading of the webpage and intuitively let the user know to let it load for a few seconds
+  - Loads faster the first time accessing and hides on loaded
   <br>
 - Homepage  (_Page1_)
-  - Video Background to See the      Therapist in Action
-  - Animated _Glowing_  Call to Action Button
-  - Quick Summary of Website and Service
+  - Striking blue Call to Action Button
+  - Secondary Text-box option as backup if GPS/Geolocation not available or for pre-planning destination
+  - Hides on either GPS or Text-box search call to give precendence to map page
   <br>
-- About (_Page2_)
-  - Background Image of Information
-  - Overlay with text, condensed information for quick introduction of the basis of the service
+- Interactive Map (_Page2_)
+  - Local Singapore Map with Detailed road names, locations and points of interest
+  - A 500m blue circle zone to limit search, allowing focusing of user experience to the most important information around them. (_No one wants to walk 1km to their location if carpark is too far_)
+  - Cute blur car icons with informative pop-ups for cleaner viewing
+  - Color-coded percentage parking slots to emphasize on urgency to get parking
+  - Quick summary table for larger screens for all carparks in the zone
+  - Quick Search Text-box for location change and return to Homepage Icon on top-left 
   <br>
-- Course (_Page3_)
-  - Full banner background images to showcase the specific service
-  - Accordion buttons that display information of the service on click, maximizing space and keeping the page clean
-  <br>
-- Trainer (_Page4_)
-  - Profile Page of the Therapist
-  - Quick Access social network/email/phone buttons 
-  <br>
-- Contact Form (_Page5_)
-  - Simple clean form
-  - Pop-up alert feedback on successful or unsuccessful submission
 
 ### Features Left to Implement ###
 
-- Form capture and push to email or database (Requires .php)
-- Photo Gallery of Activities with Testimonals and Blog
-- Converting to BootStrap 4, jQuery, Popper.js (all libraries have been downloaded and included, just not used) 
+- More information from different API sources, example: Parking Cost/hr, Mall/Event parking capacity, etc...
+- More robust data retrieval, to encompass all carparks available on top of current HDB carparks
+- GPS guiding system to plan routes to chosen carpark
+- ADs system for monetization, allowing future growth
+- Convert to Android or iOS, making it an App (modern)
 
 ## Technologies Used ##
 
-* [HTML](https://www.w3schools.com/html/)
+* [HTML](https://www.w3schools.com/html/ "HTML Info Page")
     - HTML is universal base language for creating webpages compatible with majority browsers
 
-* [CSS](https://www.w3schools.com/css/)
+* [CSS](https://www.w3schools.com/css/ "CSS Info Page")
     - CSS is used for implementing styling to a webpage 
 
-* [JavaScript](https://www.w3schools.com/js/)
-    - JavaScript is the programming language of HTML and the Web.
-    - Used for accordion pop-up on click
-    - Limiting checkbox selection on contact form
-    - Verify and validated required fields, and input format in the contact form
-    - Pop-up alerts (_SweetAlert2_) on form submission
-* [Git](https://git-scm.com/)/[Github](https://github.com/)
+* [JavaScript](https://www.w3schools.com/js/ "JavaScript ES6 Info Page")
+    - JavaScript is the programming language of HTML and the Web
+    - Used for API data retrieval
+    - Button interactions
+    - Color background changes
+    - Sort gathered information and creation of JSON for data collected for unified access
+* [Leaflet JS](https://leafletjs.com/ "Leaflet JS Maps Homepage")
+    - Interactive Maps with Pop-up and Markers
+    - Boundary setting for precise data display
+* [oneMap API](https://www.onemap.sg/home/ "oneMap Homepage")
+    - Singapore Local Information with detailed Map of roads, places of interest, rails, malls
+    - Consolidated information on carpark location and details
+* [Data Gov SG](https://data.gov.sg/ "DataGovSG databases Homepage")
+    - Singapore's Open source database with frequently updated information
+    - Availabiliy of Carparks slots tracking due to automated gantry carparks
+* [Git](https://git-scm.com/ "Installation for Git Support")/[Github](https://github.com/ "Github Homepage")
     - For version control and commits to Github
-* [VSCode IDE](https://code.visualstudio.com/)
+* [VSCode IDE](https://code.visualstudio.com/ "VSCode IDE Homepage")
     - Local IDE for coding HTML/CSS/JavaScript
     - Extensions used:
       - HTML CSS Support
@@ -115,9 +124,7 @@ The 100% viewport pages design is meant to focus the user's attention on a full 
 #### Responsiveness ####
 The webpage was manual tested for responsiveness on physical iPhone 6S, Samsung S8+, Xiaomi Mi Max2, 1920 x 1080 laptop screen.
 
-Other devices that are not available physically were tested using this following [Responsiveness Tool](http://responsivetesttool.com/) webpage, [Mobile-Friendly Test](https://search.google.com/test/mobile-friendly?id=07L3WeU_nndVYwaUTleP7w) as well as [Am I Responsive Design](http://ami.responsivedesign.is/?url=https://collinwuy.github.io/TGC-Project-1/)
-
-![Mobile-Friendly Test Results](assets/images/mobile-friendly-test.png "Mobile-Friendly Test Results")
+Due to the unavailability of localstorage on reponsiveness testing webpages like  [Responsiveness Tool](http://responsivetesttool.com/ "Responsiveness Tool Homepage")  or  [Mobile-Friendly Test](https://search.google.com/test/mobile-friendly?id=07L3WeU_nndVYwaUTleP7w "Mobile Friendly Test Homepage")  or [Am I Responsive Design](http://ami.responsivedesign.is/ "Am I Responsive Design Homepage"), I was unable to show responsiveness without disabling the loading page. Therefore the best way fo testing responsiveness was with Google Inspector as shown at the Demo section above.
 
 All platforms had to have correct CSS design, working animation, buttons, pop-up and elements placed in the correct position.
 

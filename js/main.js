@@ -200,7 +200,7 @@ $(document).ready(function() {
             // console.log(data);
 
             // Combining API Data to new ObjectArray
-            // Object Creation for Data Retrieved from APIs
+            // Object JSON Creation for Compounding Data Retrieved from all APIs
             function apiData(name) {
                 let o = new Object();
                 let firstIndex = carparkName.indexOf(name);
@@ -261,7 +261,7 @@ $(document).ready(function() {
                                             <li id="list-info"><b>Free Parking:</b>   ${compoundData[i].free}</li>
                                             <li id="list-info"><b>Cashcard:</b>       ${compoundData[i].system}</li>
                                             <li id="list-info"><b>Total Lots:</b>     ${compoundData[i].tlots}</li>
-                                            <li id="list-avail"><b>Available Parking Left:</b><br/><br/><h5>${compoundData[i].alots}</h5><br/>Take your time... Ample space available</li>
+                                            <li id="list-avail"><b>Available Parking Left:</b><br /><br /><h5>${compoundData[i].alots}</h5><br />Take your time...Ample space available</li>
                                             </ul>
                                     </div>`
                         )
@@ -298,6 +298,8 @@ $(document).ready(function() {
                             "<b>Available Parking Left:</b><br/><br/><h5>N/A</h5><br/>Coupon Parking or Cannot access information"
                         );
                     }
+
+
 
                     // if ((popup.isOpen()) == true) {
                     //     console.log(popup.isOpen());
