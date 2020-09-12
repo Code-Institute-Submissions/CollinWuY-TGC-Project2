@@ -18,7 +18,7 @@ The concept chosen for this project is to find a solution to a daily common prob
 
 ## Demo ##
 
-The full website demo can be previewed here: [Where to Park?](https://collinwuy.github.io/TGC-Project2/)
+The full website demo can be previewed here: [Carpark Finder SG](https://collinwuy.github.io/TGC-Project2/)
 
 Responsive is tested using Google Inspector:<br> 
 ![Responsive Demo on Various Devices](/assets/images/responsiveness.png "Website Responsiveness Preview")
