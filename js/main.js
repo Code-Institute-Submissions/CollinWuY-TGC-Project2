@@ -272,33 +272,35 @@ $(document).ready(function() {
                         .openOn(map);
 
                     // UX/UI Color change to indicate medium/low amount of parking lots left
-                    let alot = compoundData[i].alots;
-                    let tlot = compoundData[i].tlots;
-                    // console.log(alot);
-                    // console.log(tlot);
-                    if ((tlot - alot) / tlot > 0.9) {
-                        $("#list-avail").css({ background: "red" });
-                        $("#list-avail").html(
-                            `<b>Available Parking Left:</b><br/><br/><h5>${compoundData[i].alots}</h5><br/>Hurry! Running out of Space!!!`
-                        );
-                    } else if ((tlot - alot) / tlot > 0.7) {
-                        $("#list-avail").css({ background: "orangered" });
-                        $("#list-avail").html(
-                            `<b>Available Parking Left:</b><br/><br/><h5>${compoundData[i].alots}</h5><br/>Quickly! Spacing running out fast!`
-                        );
-                    } else if ((tlot - alot) / tlot > 0.5) {
-                        $("#list-avail").css({ background: "orange" });
-                        $("#list-avail").html(
-                            `<b>Available Parking Left:</b><br/><br/><h5>${compoundData[i].alots}</h5><br/>Not going to hurry you...`
-                        );
-                    }
+                    setTimeout(function() {
+                        let alot = compoundData[i].alots;
+                        let tlot = compoundData[i].tlots;
+                        // console.log(alot);
+                        // console.log(tlot);
+                        if ((tlot - alot) / tlot > 0.9) {
+                            $("#list-avail").css({ background: "red" });
+                            $("#list-avail").html(
+                                `<b>Available Parking Left:</b><br/><br/><h5>${compoundData[i].alots}</h5><br/>Hurry! Running out of Space!!!`
+                            );
+                        } else if ((tlot - alot) / tlot > 0.7) {
+                            $("#list-avail").css({ background: "orangered" });
+                            $("#list-avail").html(
+                                `<b>Available Parking Left:</b><br/><br/><h5>${compoundData[i].alots}</h5><br/>Quickly! Spacing running out fast!`
+                            );
+                        } else if ((tlot - alot) / tlot > 0.5) {
+                            $("#list-avail").css({ background: "orange" });
+                            $("#list-avail").html(
+                                `<b>Available Parking Left:</b><br/><br/><h5>${compoundData[i].alots}</h5><br/>Not going to hurry you...`
+                            );
+                        }
 
-                    //Changing undefined returned value to N/A
-                    if (alot == undefined) {
-                        $("#list-avail").html(
-                            "<b>Available Parking Left:</b><br/><br/><h5>N/A</h5><br/>Coupon Parking or Cannot access information"
-                        );
-                    }
+                        //Changing undefined returned value to N/A
+                        if (alot == undefined) {
+                            $("#list-avail").html(
+                                "<b>Available Parking Left:</b><br/><br/><h5>N/A</h5><br/>Coupon Parking or Cannot access information"
+                            );
+                        }
+                    }, 200);
 
 
 

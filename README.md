@@ -51,6 +51,8 @@ On larger devices, more fanciful click-to-expand location summary table is avail
   <br>
 - Loading page will store a reload value into localstorage, that then stops the refreshing webpage of setTimout on the second load 
   <br>
+- Combining data from different API into a JSON, allowing data from multiple sources with a linking value
+- <br>
 - Quick Access Call-to-Action button that use GPS/Geolocation to determine location
   <br>
 - Color-coded information for better UX
@@ -143,15 +145,13 @@ Code validation is achieve by using developer tools provided by [W3C Developer T
 
 Other testing include:
 - Testing of button a tag links, ensuring they jump to the correct part of the page
-- Hover animation testing with laptop and mouse overs
-- Accordion testing, ensuring pop-up panel happens on click
-- Social button's linking to Call on mobile, new page for facebook and re-direct to email with email button
-- Contact form testing
-  - Error pop-up alert for not having required fields
-  - Email format is correct before able to submit
-  - Ensuring JavaScript is active, allowing only 1 checkbox to be selected at a time
-  - Proper Error Pop-up if form validation has an error
-  - Proper Success Pop-up if form submit and validation is successful
+- Hiding and Opening of pages
+- Ensuring data retrieval successful
+- Map/Page and markers reset on new search
+- Limiting data retreival to reduce lag, but implementing a circle boundary, markers only in boundary
+- Icon button testing and displaying of correct data
+- Ensuring coded color for available carparks reflect correctly
+- 
 
 ![SweetAlert2 Popups](assets/images/SweetAlert2PopUp.png "Submit Error & Success Pop-up Alerts")
 
