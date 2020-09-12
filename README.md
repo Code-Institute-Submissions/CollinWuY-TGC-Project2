@@ -130,15 +130,14 @@ All platforms had to have correct CSS design, working animation, buttons, pop-up
 
 #### Page Load Time ####
 
-The page load time is tested using [Pingdom Tool](https://tools.pingdom.com/) while being hosted by GitHub Pages. This is vital and important as the goal was to have a responsive, non-laggy webpage with no link-loading from page to page, achieving an __A__ rating of __91/100__ points also on Asia, America and European Servers.
+The page load time is tested using [Pingdom Tool](https://tools.pingdom.com/ "Pingdom Homepage") while being hosted by GitHub Pages. This is vital and important as the goal was to have a responsive, non-laggy webpage with no link-loading from page to page, achieving an __B__ rating of __82/100__ points also on Asia, America and European Servers. With more code optimization, I believe better page load time can be achieved.
 
-![Page Load Time](/assets/images/Pingdom%20Asia.png "Website Responsiveness Preview")
+![Page Load Time](/assets/images/pingdom.png "Website Responsiveness Preview")
 
 #### Code Validation ####
 
-Code validation is achieve by using developer tools provided by [W3C Developer Tools](https://w3c.github.io/developers/tools/ "W3C Developer Tools Webpage"). The webpage code tested til no errors are found on their [Nu Html Validator](https://validator.w3.org/nu/?doc=https%3A%2F%2Fcollinwuy.github.io%2FTGC-Project-1%2F), [Internationlization Validator](https://validator.w3.org/i18n-checker/check?uri=https%3A%2F%2Fcollinwuy.github.io%2FTGC-Project-1%2F#validate-by-uri+), [CSS Validator](https://jigsaw.w3.org/css-validator/validator?uri=https%3A%2F%2Fcollinwuy.github.io%2FTGC-Project-1%2F&profile=css3svg&usermedium=all&warning=1&vextwarning=&lang=en), [Link Validator](https://validator.w3.org/checklink?uri=https%3A%2F%2Fcollinwuy.github.io%2FTGC-Project-1%2F&summary=on&hide_type=all&depth=&check=Check).
-
-![W3C Validator Results](assets/images/w3school-validated.png "W3C Validator Results")
+Code validation is achieve by using developer tools provided by [W3C Developer Tools](https://w3c.github.io/developers/tools/ "W3C Developer Tools Webpage"). The webpage code tested til no errors are found on their checkers. __CSS errors are from bootstrap and leaflet js packages.__<br>
+![Nu Html Validator](/assets/images/nuhtmlchecker.png), ![Internationlization Validator](/assets/images/internationlizationChecker.png), ![Link Validator](/assets/images/linkchecker.png), ![CSS Validator](/assets/images/csschecker.png).
 
 #### Manual Testing ####
 
@@ -177,7 +176,7 @@ On certain browsers, like Safari, JavaScript may not function on old versions of
 
 This project uses Git for version control and hosts the repository for all commits. It is linked to my local VSCode IDE. The depolyed site is hosted by Github Pages where it can automatically updated on new commits.
 
-This project can be accessed via [CollinWuY's Github](https://github.com/CollinWuY/TGC-Project-1) where you can clone/download to your computer directly, or immedaitely view the code. 
+This project can be accessed via [CollinWuY's Github](https://github.com/CollinWuY/TGC-Project2) where you can clone/download to your computer directly, or immedaitely view the code. 
 
 All the needed assets, images, videos, fonts, icons, javascript, css are in their respective folders, the main site is named index.html, all of which are offline, only links to socials are online.
 
