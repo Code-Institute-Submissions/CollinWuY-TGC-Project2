@@ -97,6 +97,10 @@ On larger devices, more fanciful click-to-expand location summary table is avail
     - Button interactions
     - Color background changes
     - Sort gathered information and creation of JSON for data collected for unified access
+* [jQuery](https://jquery.com/ "jQuery Homepage")
+    - Most commonly used JavaScript Library
+    - Ajax API calling
+    - Makes coding way easier than base JavaScript
 * [Leaflet JS](https://leafletjs.com/ "Leaflet JS Maps Homepage")
     - Interactive Maps with Pop-up and Markers
     - Boundary setting for precise data display
@@ -144,16 +148,14 @@ Code validation is achieve by using developer tools provided by [W3C Developer T
 #### Manual Testing ####
 
 Other testing include:
-- Testing of button a tag links, ensuring they jump to the correct part of the page
-- Hiding and Opening of pages
+- Testing GPS location accuracy with Mobile Phones
+- Checking data is correct for each marker location
 - Ensuring data retrieval successful
 - Map/Page and markers reset on new search
 - Limiting data retreival to reduce lag, but implementing a circle boundary, markers only in boundary
 - Icon button testing and displaying of correct data
 - Ensuring coded color for available carparks reflect correctly
-- 
-
-![SweetAlert2 Popups](assets/images/SweetAlert2PopUp.png "Submit Error & Success Pop-up Alerts")
+- Taking into consideration the website UX, ensuring quick responsiveness and no lag
 
 #### Browser Testing ####
 
@@ -163,14 +165,15 @@ The site while being hosted by Github Pages is tested on a laptop of 1920x1080 r
 - Firefox
 - Microsoft Edge
 
-It is also tested on a iPhone 6S for:
-- Safari 
-
 #### Bugs ####
 
-Currently as the mobile responsiveness is accomplished by purely CSS, different vertically of different device viewports causes shifting of the format of the webpage, or having the fonts becoming too small for that viewport. I think this can be resolve if the html is convertered into BootStrap for more unified resizing as compared to media queries.
+Due to the async nature of JavaScript, API retrieval success is highly dependant on the responsiveness of the API source. Resulting in slower API retrieval as compared to other functions in the code. Even on a loading page with refresh, sometimes API retrieval can fail. This can be rectified by just refreshing the page.
 
-On certain browsers, like Safari, JavaScript may not function on old versions of Safari and Firefox Browsers have issue reading CSS for checkboxes. However based on [W3School Browser Statics](https://www.w3schools.com/browsers/) in 2020, 80%+ uses Chrome, small number of people uses other browsers.
+Leaflet js popups when markers are click also function slower then other functions, leading to the need to set a timeout color-change and comparison codes. Giving a sudden change of details once the popup is seen, instead of being instantly in the correct color and format. Current solution is to use a seTimeout.
+
+The loading screen is active and refreshes every 3 sec. Using localstorage, by inputing a variable and checking if it exist, we can break this reset cycle. However on first loading it takes twices as long to refresh and does not work on sub-servers or pages that do not allow localstorage, leading to endless refreshing.
+
+On certain browsers, like Safari, JavaScript may not function on old versions of Safari and Firefox Browsers. However based on [W3School Browser Statics](https://www.w3schools.com/browsers/) in 2020, 80%+ uses Chrome, small number of people uses other browsers.
 
 ## Deployment ##
 
@@ -178,7 +181,7 @@ This project uses Git for version control and hosts the repository for all commi
 
 This project can be accessed via [CollinWuY's Github](https://github.com/CollinWuY/TGC-Project2) where you can clone/download to your computer directly, or immedaitely view the code. 
 
-All the needed assets, images, videos, fonts, icons, javascript, css are in their respective folders, the main site is named index.html, all of which are offline, only links to socials are online.
+All the needed assets, images, videos, fonts, icons, javascript, css are in their respective folders, the main site is named index.html.
 
 #### Downloading Locally ####
 
@@ -198,19 +201,20 @@ All files can be easily download on the Github site:
 
 Cloning this repository can be achieve by using the link provided at the Github site:
 1. At the top right, click on green button under __CODE__
-2. Copy the link provided: `https://github.com/CollinWuY/TGC-Project-1.git`
+2. Copy the link provided: `https://github.com/CollinWuY/TGC-Project2.git`
 
 ![Github Clone URL](assets/images/githubsiteclone.png "Clone URL from Github")
 
-3. In your preferred IDE, Run in terminal `git clone https://github.com/CollinWuY/TGC-Project-1.git`
+3. In your preferred IDE, Run in terminal `git clone https://github.com/CollinWuY/TGC-Project2.git`
 4. Repository will be cloned as a folder on your computer
 
 ## Credits ##
 
 #### Media ####
 
-- Background Video and Therapist Images are all Personal Images
-- Moshe Feldenkrais Image is taken from [Wikipedia-Moshe Feldenkrais](https://en.wikipedia.org/wiki/Mosh%C3%A9_Feldenkrais)
+- Background Image is be Andrey Kirov and downloaded from [Unsplash](https://unsplash.com/photos/i7qsJX0Ym44 "Unsplash Webpage for Andrey Kriov Carpark Image")
+- Singapore detailed map is fron [oneMap](https://www.onemap.sg/home "oneMap Homepage")
+- Details for carparks is from [oneMap](https://www.onemap.sg/home "oneMap Homepage") and [Data Gov SG](https://data.gov.sg/dataset/carpark-availability "Data Gov SG Site")
 
 #### Icons ####
 
@@ -219,21 +223,12 @@ Cloning this repository can be achieve by using the link provided at the Github 
 
 #### Code/Concept ####
 
-- Responsive Side Navbar is a modified version of [CodingNepal - Responsive Sidebar Menu using HTML & CSS](https://www.codingnepalweb.com/2020/04/responsive-sidebar-menu-html-css.html)  
-- Call to Action button on Homepage is a modified version of [Online Tutorials - Neon Light Animation Effects on Hover | CSS Snake Border](https://www.youtube.com/watch?v=ex7jGbyFgpA)
-- Page 3 - Accordion buttons are modified version of Accordion from [W3Schools.com](https://www.w3schools.com/howto/howto_js_accordion.asp)
-- Color Palette is generated by [Coolors.co](https://coolors.co/282c34-542331-fa7d64-ffe1a8)
-- Pop-up alerts library is downloaded from [Sweet Alert 2](https://sweetalert2.github.io/)
+- Loading page pure css ring loader is of [DHINTECH - Pure CSS Loader UX](https://www.youtube.com/watch?v=CQ--dXUvvVA "Youtube Video on Pure CSS Loader UX")  
 
 #### Fonts ####
 
-- Fonts are downloaded at [Google Fonts Mallanna](https://fonts.google.com/specimen/Mallanna?query=mallanna) | [Google Fonts Montserrat](https://fonts.google.com/specimen/Montserrat?query=montserra)
-
-#### Unused Libraries for Future Implement ####
-
-- [BootStrap 4.5 CSS and JS](https://getbootstrap.com/docs/4.5/getting-started/download/) 
-- [jQuery 3.5.1 JS](https://jquery.com/download/)
-- [Popper.js.org](https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js)
+- Fonts are inbuilt in VSCode IDE with Google Fonts; Google Fonts Verdana and Google Fonts Georgia
+<br>
 <br>
 
 __THIS WEBSITE IS FOR EDUCATIONAL PURPOSE ONLY - ALL RIGHTS RETAIN BY COLLIN WU YUEWEI__
