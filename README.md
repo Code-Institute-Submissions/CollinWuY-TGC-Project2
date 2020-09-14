@@ -5,7 +5,16 @@ By: **Collin Wu Yuewei** -- *Code Institute Batch 8* --
 
 An interactive website meant to help local Singaporean's to find alternative carparking in HDB areas when their destination is full-up. Singapore is a tightly dense metropolitan city, where many drive to highly dense congregation locations like malls, hotels, cinemas, offices... etc. 
 
-Many of times, these places face full carpark queue lines, and people may even wait up to an hour before finding carpark at such location. Luckily in Singapore, there are many residential Housing Developement Board (HDB) carparks close-by these areas that area easily accessible, automated with gantries and slots tracking, though it requries a short-walk to the location. This website aims to helps you find these carparks and inform you the available slots left within a 500m zone.
+Many of times it is a common issue that these places face full carpark queue lines, and people may even wait up to an hour before finding carpark at such location. Luckily in Singapore, there are many residential Housing Developement Board (HDB) carparks close-by these areas that area easily accessible, automated with gantries and slots tracking, though it requries a short-walk to the location. This website aims to helps you find these carparks and inform you the available slots left within a 500m zone.
+
+__Few Examples You Can key in to test:__
+
+- Tampines Mall
+- Bedok Mall
+- Jurong Point
+- Northpoint
+- Hougang Ave 1
+- Ang Mo Kio Ave 8
 
 ![Website Preview Image](/assets/images/WhereToPark.png "Where to Park Website Homepage")
 ![Website Preview Image](/assets/images/WhereToPark2.png "Where to Park Website Search Page")
@@ -14,7 +23,7 @@ Many of times, these places face full carpark queue lines, and people may even w
 ## Aim ##
 The goal of the project is to build an interactive site to present useful information drawn from different sources to the user, using techonology and languages taught in the Code Institute Fullstack Web Developer Program; at Project 2, namely HTML, CSS and JS.
 
-The concept chosen for this project is to find a solution to a daily common problem of having to face carpark queue lines when heading towards malls or areas of interest. The problem is people do not know the locations and availability of residential carparks around their destination and decide to park at the location instead. The easy and efficient solution is closely around, and this website's aim is to provide these information for users to make decisions instead of blindly queueing up for hours.
+__The concept chosen for this project is to find a solution to a daily common problem of having to face carpark queue lines when heading towards malls or areas of interest.__ The problem is people do not know the locations and availability of residential carparks around their destination and decide to park at the location instead. The easy and efficient solution is closely around, and this website's aim is to provide these information for users to make decisions instead of blindly queueing up for hours.
 
 ## Demo ##
 
