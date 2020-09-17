@@ -258,12 +258,12 @@ $(document).ready(function() {
                             `   <div id="markerPopup">
                                         <ul id="pop-list">
                                             <li id="list-name"><b>${compoundData[i].description} - ${compoundData[i].name}</b></li>
-                                            <li id="list-info"><b>Type:</b>           ${compoundData[i].type}</li>
-                                            <li id="list-info"><b>Parking Limit:</b>  ${compoundData[i].shortTerm}</li>
-                                            <li id="list-info"><b>Night Parking:</b>  ${compoundData[i].night}</li>
-                                            <li id="list-info"><b>Free Parking:</b>   ${compoundData[i].free}</li>
-                                            <li id="list-info"><b>Cashcard:</b>       ${compoundData[i].system}</li>
-                                            <li id="list-info"><b>Total Lots:</b>     ${compoundData[i].tlots}</li>
+                                            <li class="list-info"><b>Type:</b>           ${compoundData[i].type}</li>
+                                            <li class="list-info"><b>Parking Limit:</b>  ${compoundData[i].shortTerm}</li>
+                                            <li class="list-info"><b>Night Parking:</b>  ${compoundData[i].night}</li>
+                                            <li class="list-info"><b>Free Parking:</b>   ${compoundData[i].free}</li>
+                                            <li class="list-info"><b>Cashcard:</b>       ${compoundData[i].system}</li>
+                                            <li class="list-info" id="list-info-tlots"><b>Total Lots:</b>     ${compoundData[i].tlots}</li>
                                             <li id="list-avail"><b>Available Parking Left:</b><br /><br /><h5>${compoundData[i].alots}</h5><br />Take your time...Ample space available</li>
                                             </ul>
                                     </div>`
@@ -301,6 +301,9 @@ $(document).ready(function() {
                         if (alot == undefined) {
                             $("#list-avail").html(
                                 "<b>Available Parking Left:</b><br/><br/><h5>N/A</h5><br/>Coupon Parking or Cannot access information"
+                            );
+                            $("#list-info-tlots").html(
+                                "<b>Total Lots:</b> N/A"
                             );
                         }
                     }, 215);

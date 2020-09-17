@@ -223,7 +223,7 @@ body {
     color: white;
 }
 
-#list-info {
+.list-info {
     padding-left: 1vw;
     padding-right: 1vw;
     display: flex;
@@ -295,7 +295,7 @@ body {
         font-size: 1.5vh;
         padding: 1vh;
     }
-    #list-info {
+    .list-info {
         line-height: 2.5vh;
     }
     #list-name {
