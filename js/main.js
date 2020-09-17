@@ -316,13 +316,31 @@ $(document).ready(function() {
                     let alot = compoundData[i].alots;
                     if (alot == undefined) {
                         $("#info-list tbody").append(
-                            `<tr class="collapse row1"><td><b>${compoundData[i].description}</b></td><td>N/A</td></tr>`
+                            `<tr class="collapse row1"><td class="row-des"><b>${compoundData[i].description}</b></td><td class="row-alots">N/A</td></tr>`
                         );
                     } else {
                         $("#info-list tbody").append(
-                            `<tr class="collapse row1"><td><b>${compoundData[i].description}</b></td><td>${compoundData[i].alots}</td></tr>`
+                            `<tr class="collapse row1"><td class="row-des"><b>${compoundData[i].description}</b></td><td class="row-alots">${compoundData[i].alots}</td></tr>`
                         );
                     }
+
+                    // Trying to get color coding to work in summary
+
+                    // let tlot = compoundData[i].tlots;
+
+                    // console.log(alot)
+                    // console.log(tlot)
+                    // if ((tlot - alot) / tlot > 0.9 || alot == undefined) {
+                    //     $(".row-alots").css({ background: "red" });
+                    // } else if ((tlot - alot) / tlot > 0.7) {
+                    //     $(".row-alots").css({ background: "orangered" });
+                    // } else if ((tlot - alot) / tlot > 0.5) {
+                    //     $(".row-alots").css({ background: "orange" });
+                    // } else {
+                    //     $(".row-alots").css({ background: "green" });
+                    // }
+
+
                 }
             }
             markersLayer.addTo(map);
