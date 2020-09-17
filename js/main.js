@@ -264,7 +264,7 @@ $(document).ready(function() {
                                             <li class="list-info"><b>Free Parking:</b>   ${compoundData[i].free}</li>
                                             <li class="list-info"><b>Cashcard:</b>       ${compoundData[i].system}</li>
                                             <li class="list-info" id="list-info-tlots"><b>Total Lots:</b>     ${compoundData[i].tlots}</li>
-                                            <li id="list-avail"><b>Available Parking Left:</b><br /><br /><h5>${compoundData[i].alots}</h5><br />Take your time...Ample space available</li>
+                                            <li id="list-avail"><b>Available Parking Left:</b><br /><h5>${compoundData[i].alots}</h5>Take your time...Ample space available</li>
                                             </ul>
                                     </div>`
                         )
@@ -283,24 +283,24 @@ $(document).ready(function() {
                         if ((tlot - alot) / tlot > 0.9) {
                             $("#list-avail").css({ background: "red" });
                             $("#list-avail").html(
-                                `<b>Available Parking Left:</b><br/><br/><h5>${compoundData[i].alots}</h5><br/>Hurry! Running out of Space!!!`
+                                `<b>Available Parking Left:</b><br/><h5>${compoundData[i].alots}</h5>Hurry! Running out of Space!!!`
                             );
                         } else if ((tlot - alot) / tlot > 0.7) {
                             $("#list-avail").css({ background: "orangered" });
                             $("#list-avail").html(
-                                `<b>Available Parking Left:</b><br/><br/><h5>${compoundData[i].alots}</h5><br/>Quickly! Spacing running out fast!`
+                                `<b>Available Parking Left:</b><br/><h5>${compoundData[i].alots}</h5>Quickly! Spacing running out fast!`
                             );
                         } else if ((tlot - alot) / tlot > 0.5) {
                             $("#list-avail").css({ background: "orange" });
                             $("#list-avail").html(
-                                `<b>Available Parking Left:</b><br/><br/><h5>${compoundData[i].alots}</h5><br/>Not going to hurry you...`
+                                `<b>Available Parking Left:</b><br/><h5>${compoundData[i].alots}</h5>Not going to hurry you...`
                             );
                         }
 
                         //Changing undefined returned value to N/A
                         if (alot == undefined) {
                             $("#list-avail").html(
-                                "<b>Available Parking Left:</b><br/><br/><h5>N/A</h5><br/>Coupon Parking or Cannot access information"
+                                "<b>Available Parking Left:</b><br/><h5>N/A</h5>Coupon Parking or Cannot access information"
                             );
                             $("#list-info-tlots").html(
                                 "<b>Total Lots:</b> N/A"
