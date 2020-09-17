@@ -221,7 +221,7 @@ Cloning this repository can be achieve by using the link provided at the Github 
 
 #### Media ####
 
-- Background Image is be Andrey Kirov and downloaded from [Unsplash](https://unsplash.com/photos/i7qsJX0Ym44 "Unsplash Webpage for Andrey Kriov Carpark Image")
+- Background Image is by Andrey Kirov and downloaded from [Unsplash](https://unsplash.com/photos/i7qsJX0Ym44 "Unsplash Webpage for Andrey Kriov Carpark Image")
 - Singapore detailed map is fron [oneMap](https://www.onemap.sg/home "oneMap Homepage")
 - Details for carparks is from [oneMap](https://www.onemap.sg/home "oneMap Homepage") and [Data Gov SG](https://data.gov.sg/dataset/carpark-availability "Data Gov SG Site")
 

@@ -80,7 +80,7 @@ $(document).ready(function() {
         map.invalidateSize();
     }
 
-    //Map creation function call then hiding map to give 1 page look
+    //Map creation function call
     createMap();
 
     //Api Key Generation for oneMapAPI
@@ -235,6 +235,8 @@ $(document).ready(function() {
             // console.log(geoParts);
             // console.log(geoParts[0].lat);
             // console.log(geoParts[0].lng);
+
+            // Hide Map Page only after API call is made, ensuring map is loaded properly
             $("#mapPage").hide();
         });
 
@@ -302,16 +304,6 @@ $(document).ready(function() {
                             );
                         }
                     }, 215);
-
-
-
-                    // if ((popup.isOpen()) == true) {
-                    //     console.log(popup.isOpen());
-                    //     map.closePopup();
-                    // } else {
-                    //     console.log(popup.isOpen());
-                    //     map.openPopup();
-                    // }
                 });
 
                 // Display Markers Only when LatLng of Data is within circleMarker LatLng Bounds
@@ -398,7 +390,7 @@ $(document).ready(function() {
                     let popup = L.popup()
                         .setLatLng([mapLat, mapLong])
                         .setContent(
-                            `<h6>You are here:</h6><br/><b><h3> ${userText} </h3><b>`
+                            `<h6>You are here:</h6><br/><b><h3 style="text-transform: capitalize"> ${userText} </h3><b>`
                         )
                         .openOn(map);
                     map.setView([mapLat, mapLong], 16);
@@ -446,7 +438,7 @@ $(document).ready(function() {
                     let popup = L.popup()
                         .setLatLng([mapLat, mapLong])
                         .setContent(
-                            `<h6>You are here:</h6><br/><b><h3> ${userText} </h3><b>`
+                            `<h6>You are here:</h6><br/><b><h3 style="text-transform: capitalize"> ${userText} </h3><b>`
                         )
                         .openOn(map);
                     map.setView([mapLat, mapLong], 16);
@@ -486,7 +478,7 @@ $(document).ready(function() {
                 var popup = L.popup()
                     .setLatLng([autoLat, autoLng])
                     .setContent(
-                        `<h6>You are here:</h6><br/><b><h3> GPS Location </h3><b>`
+                        `<h6>You are here:</h6><br/><b><h3 style="text-transform: capitalize"> GPS Location </h3><b>`
                     )
                     .openOn(map);
                 map.setView([autoLat, autoLng], 16);
