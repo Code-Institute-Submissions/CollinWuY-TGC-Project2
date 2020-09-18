@@ -342,7 +342,6 @@ $(document).ready(function() {
                         );
                     }
 
-                    // Trying to get color coding to work in summary
                 }
             }
             markersLayer.addTo(map);
