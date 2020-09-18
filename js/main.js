@@ -3,7 +3,7 @@ $(document).ready(function() {
     let apiToken;
     let map;
     let markersLayer;
-    let homepage = document.querySelector('#homePage');
+    let homepage = document.querySelector("#homePage");
     let mapLong;
     let mapLat;
     let autoLat;
@@ -15,7 +15,7 @@ $(document).ready(function() {
     let availableLots = [];
     let latLng = [];
     let geoParts = [];
-    let carparkIcon = '/TGC-Project2/assets/images/car.png'; //Using local as oneMap API .png returned as 404
+    let carparkIcon = "/TGC-Project2/assets/images/car.png"; //Using local as oneMap API .png returned as 404
     let parkingMapIcons;
     let carparkDescription = [];
     let carParkType = [];
@@ -27,8 +27,8 @@ $(document).ready(function() {
 
     let date = new Date();
     let dateYr = date.getFullYear();
-    let dateMt = ('0' + (date.getMonth() + 1)).slice(-2);
-    let dateDay = ('0' + date.getDate()).slice(-2);
+    let dateMt = ("0" + (date.getMonth() + 1)).slice(-2);
+    let dateDay = ("0" + date.getDate()).slice(-2);
     let dateHr = date.getHours();
     let dateMin = date.getMinutes();
     let dateTime = `${dateYr}-${dateMt}-${dateDay}T${dateHr}:${dateMin}:00`;
@@ -46,7 +46,7 @@ $(document).ready(function() {
     L.Circle.include({
         contains: function(latLng) {
             return this.getLatLng().distanceTo(latLng) < this.getRadius();
-        }
+        },
     });
 
     //Custom carpark icon settings for Leaflet JS
@@ -54,31 +54,33 @@ $(document).ready(function() {
         iconUrl: carparkIcon,
         iconSize: [40, 40],
         iconAnchor: [10, 35],
-        popupAnchor: [-3, -76]
-    })
+        popupAnchor: [-3, -76],
+    });
 
     //Map Creation at start of Webpage
     const createMap = async function() {
         const center = L.bounds([1.56073, 104.11475], [1.16, 103.502]).getCenter();
-        map = L.map('mapdiv').setView([center.x, center.y], 12);
+        map = L.map("mapdiv").setView([center.x, center.y], 12);
         markersLayer = new L.LayerGroup();
 
-        const basemap = L.tileLayer('https://maps-{s}.onemap.sg/v3/Default/{z}/{x}/{y}.png', {
-            detectRetina: true,
-            maxZoom: 18,
-            minZoom: 11,
-            //Do not remove this attribution
-            attribution: '<img src="https://docs.onemap.sg/maps/images/oneMap64-01.png" style="height:20px;width:20px;"/> New OneMap | Map data &copy; contributors, <a href="http://SLA.gov.sg">Singapore Land Authority</a>'
-        });
+        const basemap = L.tileLayer(
+            "https://maps-{s}.onemap.sg/v3/Default/{z}/{x}/{y}.png", {
+                detectRetina: true,
+                maxZoom: 18,
+                minZoom: 11,
+                //Do not remove this attribution
+                attribution: '<img src="https://docs.onemap.sg/maps/images/oneMap64-01.png" style="height:20px;width:20px;"/> New OneMap | Map data &copy; contributors, <a href="http://SLA.gov.sg">Singapore Land Authority</a>',
+            }
+        );
 
         map.setMaxBounds([
             [1.56073, 104.1147],
-            [1.16, 103.502]
+            [1.16, 103.502],
         ]);
 
         basemap.addTo(map);
         map.invalidateSize();
-    }
+    };
 
     //Map creation function call
     createMap();
@@ -90,28 +92,32 @@ $(document).ready(function() {
 
     //Settings for AJAX call function (primary to call API Key from oneMap first)
     var settings = {
-        "async": true,
-        "crossDomain": true,
-        "url": "https://developers.onemap.sg/privateapi/auth/post/getToken",
-        "method": "POST",
-        "processData": false,
-        "contentType": false,
-        "mimeType": "multipart/form-data",
-        "data": form
-    }
+        async: true,
+        crossDomain: true,
+        url: "https://developers.onemap.sg/privateapi/auth/post/getToken",
+        method: "POST",
+        processData: false,
+        contentType: false,
+        mimeType: "multipart/form-data",
+        data: form,
+    };
 
     // Creating a new API Token for oneMap
     function apiTokenCall() {
-        return [$.ajax(settings).done(function(response) {
-            responseJson = JSON.parse(response); //convert to JSON format
-            apiToken = responseJson.access_token; // Assigning variable to api key
-            //console.log(response); // returned as string
-            //console.log(responseJson); //checking JSON format
-            //console.log(apiToken); //checking api key
-
-        }, $(document).ajaxError(function() {
-            location.reload();
-        }))]
+        return [
+            $.ajax(settings).done(
+                function(response) {
+                    responseJson = JSON.parse(response); //convert to JSON format
+                    apiToken = responseJson.access_token; // Assigning variable to api key
+                    //console.log(response); // returned as string
+                    //console.log(responseJson); //checking JSON format
+                    //console.log(apiToken); //checking api key
+                },
+                $(document).ajaxError(function() {
+                    location.reload();
+                })
+            ),
+        ];
     }
 
     // Calling API Data when API Token Call is done
@@ -141,9 +147,7 @@ $(document).ready(function() {
 
         // ES6 Fetch API for oneMapThemeURL
         async function oneMapAPIData() {
-            return await fetch(oneMapThemeURL).then((themeResp) =>
-                themeResp.json()
-            );
+            return await fetch(oneMapThemeURL).then((themeResp) => themeResp.json());
         }
 
         // ES6 Fetch API for dataSgURL
@@ -167,9 +171,7 @@ $(document).ready(function() {
                 shortTermParking.push(themeResp.SrchResults[i].SHORT_TERM_PARKING);
                 nightParking.push(themeResp.SrchResults[i].NIGHT_PARKING);
                 freeParking.push(themeResp.SrchResults[i].FREE_PARKING);
-                parkingSystemType.push(
-                    themeResp.SrchResults[i].TYPE_OF_PARKING_SYSTEM
-                );
+                parkingSystemType.push(themeResp.SrchResults[i].TYPE_OF_PARKING_SYSTEM);
                 // iconURL = themeResp.SrchResults[i].ICON_NAME; //returns 404
             }
 
@@ -273,28 +275,33 @@ $(document).ready(function() {
                         //<li><b>Lat + Lng:</b> ${geoParts[i].lat} , ${geoParts[i].lng}</li>
                         .openOn(map);
 
-                    // UX/UI Color change to indicate medium/low amount of parking lots left
+                    // UX/UI Color change to indicate medium/low amount of parking lots left changing html
                     // Have to setTimeout as the code run async and the popup is slower
                     setTimeout(function() {
                         let alot = compoundData[i].alots;
                         let tlot = compoundData[i].tlots;
                         // console.log(alot);
                         // console.log(tlot);
-                        if ((tlot - alot) / tlot > 0.9) {
+                        if ((tlot - alot) / tlot == 1) {
+                            $("#list-avail").html(
+                                `<b>Available Parking Left:</b><br/><h5>${compoundData[i].alots}</h5>Out of Space!!!`
+                            );
                             $("#list-avail").css({ background: "red" });
+                        } else if ((tlot - alot) / tlot > 0.9) {
                             $("#list-avail").html(
                                 `<b>Available Parking Left:</b><br/><h5>${compoundData[i].alots}</h5>Hurry! Running out of Space!!!`
                             );
+                            $("#list-avail").css({ background: "red" });
                         } else if ((tlot - alot) / tlot > 0.7) {
-                            $("#list-avail").css({ background: "orangered" });
                             $("#list-avail").html(
                                 `<b>Available Parking Left:</b><br/><h5>${compoundData[i].alots}</h5>Quickly! Spacing running out fast!`
                             );
+                            $("#list-avail").css({ background: "orangered" });
                         } else if ((tlot - alot) / tlot > 0.5) {
-                            $("#list-avail").css({ background: "orange" });
                             $("#list-avail").html(
                                 `<b>Available Parking Left:</b><br/><h5>${compoundData[i].alots}</h5>Not going to hurry you...`
                             );
+                            $("#list-avail").css({ background: "orange" });
                         }
 
                         //Changing undefined returned value to N/A
@@ -302,9 +309,7 @@ $(document).ready(function() {
                             $("#list-avail").html(
                                 "<b>Available Parking Left:</b><br/><h5>N/A</h5>Coupon Parking or Cannot access information"
                             );
-                            $("#list-info-tlots").html(
-                                "<b>Total Lots:</b> N/A"
-                            );
+                            $("#list-info-tlots").html("<b>Total Lots:</b> N/A");
                         }
                     }, 215);
                 });
@@ -312,35 +317,32 @@ $(document).ready(function() {
                 // Display Markers Only when LatLng of Data is within circleMarker LatLng Bounds
                 if (circleMarker.contains(themeMarker.getLatLng()) == true) {
                     themeMarker.addTo(markersLayer);
-                    // Display All Marker Summary to Info Summary Table *only on 768px width View and above; change undefined to NA
+                    // Display All Marker Summary to Info Summary Table *only on 768px width View and above; change undefined to NA, appending details
                     let alot = compoundData[i].alots;
+                    let tlot = compoundData[i].tlots;
                     if (alot == undefined) {
                         $("#info-list tbody").append(
-                            `<tr class="collapse row1"><td class="row-des"><b>${compoundData[i].description}</b></td><td class="row-alots">N/A</td></tr>`
+                            `<tr class="collapse row1"><td class="row-des"><b>${compoundData[i].description}</b></td><td class="row-alots" style="background: red">N/A</td></tr>`
+                        );
+                    } else if ((tlot - alot) / tlot > 0.9 || alot == undefined) {
+                        $("#info-list tbody").append(
+                            `<tr class="collapse row1"><td class="row-des"><b>${compoundData[i].description}</b></td><td class="row-alots" style="background: red">${compoundData[i].alots}</td></tr>`
+                        );
+                    } else if ((tlot - alot) / tlot > 0.7) {
+                        $("#info-list tbody").append(
+                            `<tr class="collapse row1"><td class="row-des"><b>${compoundData[i].description}</b></td><td class="row-alots" style="background: orangered">${compoundData[i].alots}</td></tr>`
+                        );
+                    } else if ((tlot - alot) / tlot > 0.5) {
+                        $("#info-list tbody").append(
+                            `<tr class="collapse row1"><td class="row-des"><b>${compoundData[i].description}</b></td><td class="row-alots" style="background: orange">${compoundData[i].alots}</td></tr>`
                         );
                     } else {
                         $("#info-list tbody").append(
-                            `<tr class="collapse row1"><td class="row-des"><b>${compoundData[i].description}</b></td><td class="row-alots">${compoundData[i].alots}</td></tr>`
+                            `<tr class="collapse row1"><td class="row-des"><b>${compoundData[i].description}</b></td><td class="row-alots" style="background: green">${compoundData[i].alots}</td></tr>`
                         );
                     }
 
                     // Trying to get color coding to work in summary
-
-                    // let tlot = compoundData[i].tlots;
-
-                    // console.log(alot)
-                    // console.log(tlot)
-                    // if ((tlot - alot) / tlot > 0.9 || alot == undefined) {
-                    //     $(".row-alots").css({ background: "red" });
-                    // } else if ((tlot - alot) / tlot > 0.7) {
-                    //     $(".row-alots").css({ background: "orangered" });
-                    // } else if ((tlot - alot) / tlot > 0.5) {
-                    //     $(".row-alots").css({ background: "orange" });
-                    // } else {
-                    //     $(".row-alots").css({ background: "green" });
-                    // }
-
-
                 }
             }
             markersLayer.addTo(map);
@@ -512,7 +514,7 @@ $(document).ready(function() {
                 //console.log(autoLat, autoLng); For Point Location Accuracy Checking
             }
         }
-    })
+    });
 
     //Loading Screen Timer and Reset to enesure API is properly called
     setTimeout(function() {
@@ -525,8 +527,5 @@ $(document).ready(function() {
                 localStorage.removeItem("reloaded");
             }
         }
-    }, 3000)
-
-
-
-})
+    }, 3000);
+});
