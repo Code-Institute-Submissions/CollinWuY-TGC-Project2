@@ -85,21 +85,24 @@ $(document).ready(function() {
     //Map creation function call
     createMap();
 
+    // NO LONGER REQUIRED -- oneMap Old Code
     //Api Key Generation for oneMapAPI
-    var form = new FormData();
-    form.append("email", "xlazurelx@gmail.com");
-    form.append("password", "Collin123");
+    // let form = new FormData();
+    // form.append("email", "xlazurelx@gmail.com");
+    // form.append("password", "Collin123");
+    // console.log(form)
 
-    //Settings for AJAX call function (primary to call API Key from oneMap first)
     var settings = {
-        async: true,
-        crossDomain: true,
-        url: "https://developers.onemap.sg/privateapi/auth/post/getToken",
+        url: "https://cors-anywhere.herokuapp.com/https://developers.onemap.sg/privateapi/auth/post/getToken",
         method: "POST",
-        processData: false,
-        contentType: false,
-        mimeType: "multipart/form-data",
-        data: form,
+        timeout: 0,
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        data: {
+            email: "xlazurelx@gmail.com",
+            password: "Collin123",
+        },
     };
 
     // Creating a new API Token for oneMap
@@ -107,14 +110,14 @@ $(document).ready(function() {
         return [
             $.ajax(settings).done(
                 function(response) {
-                    responseJson = JSON.parse(response); //convert to JSON format
-                    apiToken = responseJson.access_token; // Assigning variable to api key
+                    // responseJson = JSON.parse(response); //convert to JSON format //No longer Required***
+                    apiToken = response.access_token; // Assigning variable to api key
                     //console.log(response); // returned as string
                     //console.log(responseJson); //checking JSON format
                     //console.log(apiToken); //checking api key
                 },
                 $(document).ajaxError(function() {
-                    location.reload();
+                    alert("Api Token Cannot Be Called from Source!");
                 })
             ),
         ];
